@@ -1,0 +1,8 @@
+<odoo>
+    <data>
+        <record id="decimal_for_coeff_vcf" model="decimal.precision">
+            <field name="name">Coeff VCF decimal precision</field>
+            <field name="digits">4</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,79 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="sale_order_inherit_form_view">
+            <field name="name">sale.order.inherit.view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="warehouse_id"/>
+                    <field name="orde_chargement"/>
+                    <field name="matricule_citerne_id"/>
+		    <field name="date_fin_carnet"/>
+		    <field name="heure_depot"/>
+                    <field name="taux_majoration"/>
+                    <field name="ptac_ptrac_majore"/>
+                </xpath>
+                
+                <xpath expr="//form/sheet/group/group[2]/field[@name='date_order']" position="after">
+                    <field name="regime_douanier"/>
+                    <field name="transporteur_id"/>
+                    <field name="ptac_ptrac"/>
+                    <field name="poid_vide_camion" invisible="True"/>
+                    <field name="remplisseur_id"/>
+                    <field name="num_ilot"/>
+                    <field name="poids_calcule"/>
+                    <field name="date_order" readonly="0"/>
+                </xpath>
+                
+                <xpath expr="//form/sheet/group/group[2]/field[@name='payment_term_id']" position="replace">
+                    <field name="payment_term_id" invisible="True"/>
+                </xpath>
+                
+                
+                <xpath expr="//page[@name='order_lines']" position="after">
+                    <page string="Remplissage par compartement">
+                        <field name="compartiment_ids">
+                            <tree editable="bottom">
+                                <field name="product_id" attrs="{'required': [('capacite', '!=', 0.0)]}"/>
+                                <field name="name"/>
+                                <field name="capacite"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="capacite"/>
+                                </group>
+                            </form>
+                        </field>
+                        <group col="6">
+                            <group class="oe_subtotal_footer oe_right" colspan="2">
+                                <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                    <label for="capacite_total_charge"/>
+                                </div>
+                                <field name="capacite_total_charge" nolabel="1" class="oe_subtotal_footer_separator"/>
+                            </group>
+                            <div class="oe_clear"/>
+                        </group>
+                    </page>
+                </xpath>
+                
+                
+                <xpath expr="//form/sheet/notebook/page/field/tree/field[@name='product_uom_qty']" position="after">
+                    <field name="volume_ambiant"/>
+                    <field name="temperature"/>
+                    <field name="densite_15"/>
+                    <field name="coef_vcf"/>
+                    <field name="volume_15"/>
+                    <field name="poids"/>
+                </xpath>
+                
+                <xpath expr="//form/sheet/notebook/page/field/tree/field[@name='product_uom_qty']" position="attributes">
+                    <attribute name="attrs">{'column_invisible':True}</attribute>
+                </xpath>
+                
+            </field>
+        </record>
+        
+    </data>
+</odoo>

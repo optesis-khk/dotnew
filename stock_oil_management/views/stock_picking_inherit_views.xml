@@ -1,0 +1,91 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="stock_move_inherit_form_view">
+            <field name="name">stock.picking.inherit.view</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                
+                <xpath expr="//field[@name='location_id']" position="after">
+                    <field name="orde_chargement" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                    <field name="matricule_citerne_id" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                    <field name="date_fin_carnet" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                </xpath>
+                <xpath expr="//field[@name='location_dest_id']" position="after">
+                   <field name="regime" attrs="{'invisible': [('picking_type_code', '==', 'outgoing')]}"/>
+                </xpath>
+                
+                 <xpath expr="//field[@name='scheduled_date']" position="after">
+                    <field name="date_debut" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
+                    <field name="date_fin" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
+    
+                </xpath>
+                
+                <xpath expr="//form/sheet/group/group/div" position="before">
+                    <field name="heure_debut" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')], 'required': [('picking_type_code', '=', 'outgoing')] }"/>
+                    <field name="heure_fin_charge" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                    <field name="heure_sortie" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                </xpath>
+                
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="owner" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
+                  
+                    <field name="douan" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+
+
+                    <field name="transporteur_id" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                    <field name="ptac_ptrac" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                    <field name="remplisseur_id" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                    <field name="num_ilot" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                    <field name="poids_calcule" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                    <field name="taux_majoration" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                    <field name="ptac_ptrac_majore" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                </xpath>
+                    
+                <xpath expr="//form/sheet/notebook/page[3]/field/tree/field[@name='quantity_done']" position="after">
+                      <field name="poids"/>
+                     <field name="volume_15"/>
+                    <field name="volume_ambiant"  attrs="{'readonly': ['|',('poids', '==', 0.00),('volume_15', '==', 0.00)]}"/>
+                     
+                  
+                    <field name="temperature" attrs="{'readonly': ['|',('poids', '==', 0.00),('volume_15', '==', 0.00)]}"/>
+                    <field name="densite_15"  attrs="{'readonly': ['|',('poids', '==', 0.00),('volume_15', '==', 0.00)]}"/>
+                    <field name="coef_vcf"  attrs="{'readonly': ['|',('poids', '==', 0.00),('volume_15', '==', 0.00)]}"/>
+                  
+                </xpath>
+                
+                <xpath expr="//form/sheet/notebook/page[3]/field/tree/field[@name='quantity_done']" position="attributes">
+                    <attribute name="attrs">{'column_invisible':True}</attribute>
+                </xpath>
+                
+                <xpath expr="//form/sheet/notebook/page[3]" position="after">
+                    <page string="Remplissage par compartement">
+                        <field name="compartiment_ids">
+                            <tree editable="bottom">
+                                <field name="product_id" attrs="{'required': [('capacite', '!=', 0.0)]}"/>
+                                <field name="name"/>
+                                <field name="capacite"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="capacite"/>
+                                </group>
+                            </form>
+                        </field>
+                        <group col="6">
+                            <group class="oe_subtotal_footer oe_right" colspan="2">
+                                <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                    <label for="capacite_total_charge"/>
+                                </div>
+                                <field name="capacite_total_charge" nolabel="1" class="oe_subtotal_footer_separator"/>
+                            </group>
+                            <div class="oe_clear"/>
+                        </group>
+                    </page>
+                </xpath>
+                
+            </field>
+        </record>
+    </data>
+</odoo>

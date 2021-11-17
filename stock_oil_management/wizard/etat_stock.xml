@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_opti_etat_stock" model="ir.ui.view">
+          <field name="name">opti_etat_stock</field>
+          <field name="model">opti.etat.stock</field>
+          <field name="arch" type="xml">
+            <form string="Etat Stock">
+                <group col="4" colspan="6">
+                    <field name="periode"/>
+                </group>
+                <footer>
+                    <button name="print_report" string="Imprimer" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Annuler" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+          </field>
+      </record>
+
+        <record id="launch_opti_etat_stock" model="ir.actions.act_window">
+            <field name="name">Etat Stock</field>
+            <field name="res_model">opti.etat.stock</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    
+    <menuitem
+          id="launch_launch_opti_etat_stock"
+          action="launch_opti_etat_stock"
+          parent="stock.menu_warehouse_report"
+          sequence="80"/>
+    
+</odoo>
