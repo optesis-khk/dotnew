@@ -1,1 +1,0 @@
-from . import etat_stock
