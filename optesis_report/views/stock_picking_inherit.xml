@@ -1,0 +1,12 @@
+    <xpath expr="//field[@name='location_dest_id']" position="after">
+                    <field name="heure_debut" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
+                    <field name="heure_fin" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
+        
+                </xpath>
+                
+                 <xpath expr="//field[@name='scheduled_date']" position="after">
+                
+                    <field name="date_debut" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
+                    <field name="date_fin" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
+                     
+                </xpath>
