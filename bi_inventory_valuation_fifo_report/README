@@ -1,0 +1,5 @@
+12.0.0.1 :
+Improved REPORT format
+
+'version': '12.0.0.2',
+added avialable qty and date in report 
