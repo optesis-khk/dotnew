@@ -1,0 +1,2711 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+   <data>
+      <template id="stock_inventory_report_template_document">
+         <t t-foreach="docs" t-as="o">
+            <t t-call="eq_stock_inventory_report.optesis_external_view">
+               <div class="page">
+                  <br />
+                  <br />
+                  <style>#table_css {
+                     border: 1px solid black
+                     border-collapse: collapse;
+                     border-spacing : 0px;
+                     border-top-spacing : 0px;
+                     }
+                     #table_css td, #table_css th {
+                     border: 1px solid black
+                     }
+                     #table_css tr: {
+                     border: 1px solid black
+                     }
+                     #table_css th {
+                     style="border: 1px solid black"
+                     }
+                  </style>
+                  <div class="row">
+                     <div class="col-12">
+                        <table style="border-collapse:collapse;width:100%">
+                           <tr>
+                              <td rowspan="2" class="text-center" style="width:27%;vertical-align:middle;border:1px solid;font-size:18px;font-weight:bold">DAKAR OCEAN TERMINAL</td>
+                              <td rowspan="2" style="width:7%;border:1px solid;vertical-align:iddle">
+                                 <p style="color:white">test</p>
+                              </td>
+                              <td rowspan="2" class="text-center" style="width:54%;vertical-align:middle;border:1px solid;font-size:24px;font-weight:bold">
+                                 <p>ETAT DES STOCKS</p>
+                              </td>
+                              <td class="text-center" style="width:12%;border:1px solid;font-weight:bold;vertical-align:middle">
+                                 <p style="padding:0px;margin:0px">Date de création:</p>
+                                 <p style="padding:0px;margin:0px">
+                                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/>                                
+                                 </p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td class="text-center" style="width:12%;border:1px solid;font-weight:bold;vertical-align:middle">
+                                 <span>DOT-ENR.08</span>
+                              </td>
+                           </tr>
+                        </table>
+                        <table style="border-collapse:collapse;width:100%">
+                           <tr>
+                              <td class="text-left" style="width:100%;border-left:1px solid;border-right:1px solid;border-top:1px solid">
+                                 <p style="font-weight:bold">
+                                    <span style="border-bottom:1px solid;width:100%;margin-left:7px">DEPOT:</span>
+                                    <span style="margin-left:80px">
+                                    DOT
+                                    </span>
+                                 </p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td class="text-left" style="width:100%;border-left:1px solid;border-right:1px solid;">
+                                 <p style="font-weight:bold">
+                                    <span style="border-bottom:1px solid;width:100%;margin-left:7px">CLIENT:</span>
+                                    <span style="margin-left:77px">
+                                    <span t-field="docs.location_ids" />
+                                    </span>
+                                 </p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td class="text-left" style="width:100%;border-top:1px solid">
+                                 <p style="font-weight:bold;color:black" />
+                              </td>
+                           </tr>
+                        </table>
+                        <table style="border-collapse:collapse;width:100%;margin-top:-15px">
+                           <tr>
+                              <td class="text-center" style="width:100%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px">
+                                    <span> MOIS: </span>
+                                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%b %Y')"/>
+                                 </p>
+                              </td>
+                           </tr>
+                        </table>
+                     </div>
+                  </div>
+                  <t t-foreach="docs.warehouse_ids" t-as="warehouse">
+                     <t t-if="docs.location_ids">
+                        <t t-set="location_id" t-value="get_warehouse_wise_location(docs,warehouse)" />
+                     </t>
+                     <!-- Product Header -->
+                     <table class="table table-sm o_main_table" id="table_css">
+                        <t t-if="docs.location_ids">
+                           <tr>
+                              <td class="text-left" style="width:20%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;margin-left:4px">Produit</p>
+                              </td>
+                              <t t-foreach="docs.location_ids" t-as="location_id">
+                                 <t t-value="get_products(docs)" t-set="product_ids" />
+                                 <t t-foreach="product_ids" t-as="product_id">
+                                    <t t-set="product_sum_product_qty" t-value="0.0" />
+                                    <td class="text-center" style="width:10%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                                       <p style="font-weight:bold;font-style:italic;margin-top:10px">
+                                          <span t-esc="product_id.name" />
+                                       </p>
+                                    </td>
+                                 </t>
+                              </t>
+                           </tr>
+                        </t>
+                        <!--<th>Product</th>
+                           <th>Référence</th>
+                           <th>Origine</th>
+                           <th>destination</th>
+                           <th>Date</th>
+                           <th>Type d'Operation</th>
+                           <th>Quantité</th>
+                           </tr>-->
+                     </table>
+                  </t>
+                  <table style="border-collapse:collapse;width:100%;margin-top:-14px">
+                     <tr>
+                        <td class="text-left" style="width:20%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;margin-left:4px;color:white">
+                              <span>STOCK AU :</span>
+                              <span style="margin-left:70px">30/09/2020</span>
+                           </p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL AMB</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL A15</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL AMB</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL A15</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL AMB</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL A15</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL AMB</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL A15</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL AMB</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL A15</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL AMB</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL A15</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL AMB</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL A15</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL AMB</p>
+                        </td>
+                        <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">VOL A15</p>
+                        </td>
+                     </tr>
+                  </table>
+                  <t t-foreach="docs.warehouse_ids" t-as="warehouse">
+                     <t t-if="docs.location_ids">
+                        <t t-set="location_ids" t-value="get_warehouse_wise_location(docs,warehouse)"/>
+                     </t>
+                     <!-- Product Header -->
+                     <table style="border-collapse:collapse;width:100%;margin-top:-7px">
+                        <tr>
+                           <td class="text-left" style="width:20%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;margin-left:4px;">
+                                 <span>STOCK AU :</span>
+                                 <span style="margin-left:44px">
+                                 <span t-esc="(docs.start_date).strftime('%d-%m-%Y')" />
+                                 </span>
+                              </p>
+                           </td>
+                           <t t-set="sum_begning" t-value="0.0"/>
+                           <t t-set="sum_product_qty_in" t-value="0.0"/>
+                           <t t-set="sum_product_qty_out" t-value="0.0"/>
+                           <t t-set="sum_product_qty_internal" t-value="0.0"/>
+                           <t t-set="sum_product_qty_adjustment" t-value="0.0"/>
+                           <t t-if="not docs.group_by_categ">
+                              <t t-if="docs.location_ids">
+                                 <t t-set="product_sum_begning" t-value="0.0"/>
+                                 <t t-set="product_sum_product_qty_in" t-value="0.0"/>
+                                 <t t-set="product_sum_product_qty_out" t-value="0.0"/>
+                                 <t t-set="product_sum_product_qty_internal" t-value="0.0"/>
+                                 <t t-set="product_sum_product_qty_adjustment" t-value="0.0"/>
+                                 <t t-foreach="get_products(docs)" t-as="product">
+                                    <span t-set="location_data" t-value="get_location_wise_product(docs,warehouse,product,location_ids)"/>
+                                    <td  class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                                       <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px">
+                                          <![CDATA[&nbsp;]]>
+                                       </p>
+                                    </td>
+                                    <td  class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                                       <span t-esc="location_data[1][0]"/>
+                                    </td>
+                                    <!--<tr t-foreach="location_data[0]" t-as="l">
+                                       <td></td>
+                                       <td>
+                                           <span t-esc="l.display_name"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[0]"/>
+                                           <t t-set="product_sum_begning" t-value="product_sum_begning + l_value[0]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[1]"/>
+                                           <t t-set="product_sum_product_qty_in" t-value="product_sum_product_qty_in + l_value[1]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="abs(l_value[2])"/>
+                                           <t t-set="product_sum_product_qty_out" t-value="product_sum_product_qty_out + l_value[2]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[3]"/>
+                                           <t t-set="product_sum_product_qty_internal" t-value="product_sum_product_qty_internal + l_value[3]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[4]"/>
+                                           <t t-set="product_sum_product_qty_adjustment" t-value="product_sum_product_qty_adjustment + l_value[4]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[5]"/>
+                                       </td>
+                                       </tr>-->
+                                 </t>
+                                 <!--<tr>
+                                    <th style="border-top: 2px solid black">Total</th>
+                                    <th style="border-top: 2px solid black"></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="product_sum_begning"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="product_sum_product_qty_in"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="abs(product_sum_product_qty_out)"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="product_sum_product_qty_internal"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="product_sum_product_qty_adjustment"/></th>
+                                    <th style="border-top: 2px solid black">
+                                        <span t-esc="product_sum_begning + product_sum_product_qty_in + product_sum_product_qty_out + 
+                                                    product_sum_product_qty_internal + product_sum_product_qty_adjustment "/>
+                                    </th>
+                                    </tr>-->
+                              </t>
+                              <t t-if="not docs.location_ids">
+                                 <t t-foreach="get_products(docs)" t-as="product">
+                                    <t t-set="ending_qty" t-value="0.00"/>
+                                    <t t-value="get_beginning_inventory(docs,product,warehouse)" t-set="product_beg_qty"/>
+                                    <t t-value="get_product_sale_qty(docs,warehouse,product)" t-set="product_val"/>
+                                    <t t-set="ending_qty"
+                                       t-value="product_beg_qty + product_val['product_qty_in'] + product_val['product_qty_out'] +
+                                       product_val['product_qty_internal'] + product_val['product_qty_adjustment']"/>
+                                    <!--<t r>
+                                       <td><span t-esc="product.name_get()[0][1]"/></td>
+                                       <td>
+                                           <span t-esc="product_beg_qty"/>
+                                           <t t-set="sum_begning" t-value="sum_begning + product_beg_qty"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="product_val['product_qty_in']"/>
+                                           <t t-set="sum_product_qty_in" t-value="sum_product_qty_in + product_val['product_qty_in']"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="abs(product_val['product_qty_out'])"/>
+                                           <t t-set="sum_product_qty_out" t-value="sum_product_qty_out + product_val['product_qty_out']"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="product_val['product_qty_internal']"/>
+                                           <t t-set="sum_product_qty_internal" t-value="sum_product_qty_internal + product_val['product_qty_internal']"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="product_val['product_qty_adjustment']"/>
+                                           <t t-set="sum_product_qty_adjustment" t-value="sum_product_qty_adjustment + product_val['product_qty_adjustment']"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="product_beg_qty + product_val['product_qty_in'] +
+                                                   product_val['product_qty_out'] + product_val['product_qty_internal'] +
+                                                   product_val['product_qty_adjustment']"/>
+                                       </td>
+                                       </tr>-->
+                                 </t>
+                                 <!--<tr>
+                                    <th style="border-top: 2px solid black">Grand Total</th>
+                                    <th style="border-top: 2px solid black"><span t-esc="sum_begning"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="sum_product_qty_in"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="abs(sum_product_qty_out)"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="sum_product_qty_internal"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="sum_product_qty_adjustment"/></th>
+                                    <th style="border-top: 2px solid black">
+                                        <span t-esc="sum_begning + sum_product_qty_in + sum_product_qty_out + sum_product_qty_internal 
+                                                    + sum_product_qty_adjustment "/>
+                                    </th>
+                                    </tr>-->
+                              </t>
+                              <!--Group By Category wise  -->
+                              <t t-if="docs.group_by_categ">
+                                 <t t-value="get_product_sale_qty(docs,warehouse,product=None)" t-set="product_val"/>
+                                 <t t-foreach="product_val" t-as="product_categ">
+                                    <t t-set="sum_categ_begning" t-value="0.0"/>
+                                    <t t-set="sum_categ_product_qty_in" t-value="0.0"/>
+                                    <t t-set="sum_categ_product_qty_out" t-value="0.0"/>
+                                    <t t-set="sum_categ_product_qty_internal" t-value="0.0"/>
+                                    <t t-set="sum_categ_product_qty_adjustment" t-value="0.0"/>
+                                    <span t-set="product_categ_id" t-value="request.env['product.category'].browse(product_categ)"/>
+                                    <t t-foreach="product_categ_value" t-as="product_categ_data">
+                                       <t t-set="product_id" t-value="product_categ_data['product_id']"/>
+                                       <t t-value="get_beginning_inventory(docs,product_id,warehouse)" t-set="product_beg_qty"/>
+                                       <span t-set="total_ending" t-value=" product_beg_qty + product_categ_data['product_qty_in'] +
+                                          product_categ_data['product_qty_out'] + product_categ_data['product_qty_internal'] +
+                                          product_categ_data['product_qty_adjustment']"/>
+                                       <span t-set="product_id" t-value="request.env['product.product'].browse(product_id)"/>
+                                       <t t-if="docs.location_ids">
+                                          <span t-set="location_data" t-value="get_location_wise_product(docs,warehouse,product_id,location_ids,product_categ_id)"/>
+                                          <t t-set="product_sum_begning" t-value="0.0"/>
+                                          <t t-set="product_sum_product_qty_in" t-value="0.0"/>
+                                          <t t-set="product_sum_product_qty_out" t-value="0.0"/>
+                                          <t t-set="product_sum_product_qty_internal" t-value="0.0"/>
+                                          <t t-set="product_sum_product_qty_adjustment" t-value="0.0"/>
+                                          <td>
+                                             <span t-esc="location_data[1][0]"/>
+                                          </td>
+                                          <td  class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px">
+                                                <![CDATA[&nbsp;]]>
+                                             </p>
+                                          </td>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                           </t>
+                        </tr>
+                     </table>
+                  </t>
+                  <table style="border-collapse:collapse;width:100%;margin-top:-7px">
+                     <tr>
+                        <td class="text-center" style="width:20%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;">
+                              <span>ENTREES :</span>
+                           </p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px;color:white">3,301,743</p>
+                        </td>
+                     </tr>
+                  </table>
+     
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                        <t t-set="total_val_1" t-value="0"/>
+                      <t t-set="total_val_2" t-value="0"/>
+                      <t t-set="total_val_3" t-value="0"/>
+                      <t t-set="total_val_4" t-value="0"/>
+                      <t t-set="total_val_5" t-value="0"/>
+                      <t t-set="total_val_6" t-value="0"/>
+                      <t t-set="total_val_7" t-value="0"/>
+                      <t t-set="total_val_8" t-value="0"/>
+                    <t t-foreach="docs.warehouse_ids" t-as="warehouse">
+                    <t t-if="docs.location_ids">
+                       <t t-set="location_ids" t-value="get_warehouse_wise_location(docs,warehouse)"/>
+                    </t>
+                    <table style="border-collapse:collapse;width:100%;margin-top:1px">
+                    
+                       <tr>
+                          <td class="text-center" style="width:20%;border-left:1px solid;border-right:1px solid;vertical-align:middle;" rowspan="4">
+                              
+                              
+                               <t t-if="docs.location_ids">
+                                <t t-foreach="docs.location_ids" t-as="location_id">
+                                   <t t-value="get_products(docs)" t-set="product_ids"/>
+                                   <t t-foreach="product_ids" t-as="product_id">
+                                      <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                      <t t-foreach="sm_values" t-as="sm_value">
+                                         <t t-if="sm_value.location_dest_id.id == location_id.id">
+
+                                                <span style="font-weight:bold;font-style:italic;margin-top:10px;">
+                                                        <span t-field="sm_value.picking_id.origin"></span>
+
+                                                </span>
+                                         </t>
+                                      </t>
+                                   </t>
+                                </t>
+                             </t>
+                             
+                          </td>
+
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                          <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                          <t t-set="nb_val" t-value="0"/>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <t t-if="docs.location_ids">
+                                <t t-foreach="docs.location_ids" t-as="location_id">
+                                   <t t-value="get_products(docs)" t-set="product_ids"/>
+                                   <t t-foreach="product_ids" t-as="product_id">
+                                      <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                      <t t-foreach="sm_values" t-as="sm_value">
+                                         <t t-if="sm_value.location_dest_id.id == location_id.id">
+
+                                               <t t-if="sm_value.product_id.name=='DIESEL'">
+
+                                                  <t t-set="nb_val" t-value="nb_val+1"/>
+                                                  <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                  <t t-set="total_val_1" t-value="total_val_1+sm_value.quantity_done"/>
+                                               </t>
+
+                                         </t>
+                                      </t>
+                                   </t>
+                                </t>
+                             </t>
+                             <t t-if="nb_val &gt; 0">
+                                <span t-esc="product_sum_product_qty_ttc"/>
+                             </t>
+                             <t t-if="nb_val == 0">
+                                <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                   <![CDATA[&nbsp;]]>
+                                </p>
+                             </t>
+                          </td>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                          <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                          <t t-set="nb_val" t-value="0"/>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <t t-if="docs.location_ids">
+                                <t t-foreach="docs.location_ids" t-as="location_id">
+                                   <t t-value="get_products(docs)" t-set="product_ids"/>
+                                   <t t-foreach="product_ids" t-as="product_id">
+                                      <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                      <t t-foreach="sm_values" t-as="sm_value">
+                                        <t t-if="sm_value.location_dest_id.id == location_id.id ">
+
+                                              <t t-if="sm_value.product_id.name=='ESSENCE ORDINAIRE'">
+
+                                                 <t t-set="nb_val" t-value="nb_val+1"/>
+                                                 <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                 <t t-set="total_val_2" t-value="total_val_2+sm_value.quantity_done"/>
+                                              </t>
+
+                                        </t>
+
+                                         </t>
+                                      </t>
+                                   </t>
+                                </t>
+                             
+                             <t t-if="nb_val &gt; 0">
+                                <span t-esc="product_sum_product_qty_ttc"/>
+                             </t>
+                             <t t-if="nb_val == 0">
+                                <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                   <![CDATA[&nbsp;]]>
+                                </p>
+                             </t>
+                          </td>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                          <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                          <t t-set="nb_val" t-value="0"/>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <t t-if="docs.location_ids">
+                                <t t-foreach="docs.location_ids" t-as="location_id">
+                                   <t t-value="get_products(docs)" t-set="product_ids"/>
+                                   <t t-foreach="product_ids" t-as="product_id">
+                                      <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                      <t t-foreach="sm_values" t-as="sm_value">
+                                        <t t-if="sm_value.location_dest_id.id == location_id.id ">
+
+                                              <t t-if="sm_value.product_id.name=='FUEL 180'">
+
+                                                 <t t-set="nb_val" t-value="nb_val+1"/>
+                                                 <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                 <t t-set="total_val_3" t-value="total_val_3+sm_value.quantity_done"/>
+                                              </t>
+
+                                        </t>
+                                         </t>
+                                      </t>
+                                   </t>
+                                </t>
+                             
+                             <t t-if="nb_val &gt; 0">
+                                <span t-esc="product_sum_product_qty_ttc"/>
+                             </t>
+                             <t t-if="nb_val == 0">
+                                <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                   <![CDATA[&nbsp;]]>
+                                </p>
+                             </t>
+                          </td>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                          <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                          <t t-set="nb_val" t-value="0"/>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <t t-if="docs.location_ids">
+                                <t t-foreach="docs.location_ids" t-as="location_id">
+                                   <t t-value="get_products(docs)" t-set="product_ids"/>
+                                   <t t-foreach="product_ids" t-as="product_id">
+                                      <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                      <t t-foreach="sm_values" t-as="sm_value">
+                                        <t t-if="sm_value.location_dest_id.id == location_id.id ">
+
+                                              <t t-if="sm_value.product_id.name=='GASOIL'">
+
+                                                 <t t-set="nb_val" t-value="nb_val+1"/>
+                                                 <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                 <t t-set="total_val_4" t-value="total_val_4+sm_value.quantity_done"/>
+                                              </t>
+
+                                        </t>
+                                         </t>
+                                      </t>
+                                   </t>
+                                </t>
+                             
+                             <t t-if="nb_val &gt; 0">
+                                <span t-esc="product_sum_product_qty_ttc"/>
+                             </t>
+                             <t t-if="nb_val == 0">
+                                <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                   <![CDATA[&nbsp;]]>
+                                </p>
+                             </t>
+                          </td>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                          <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                          <t t-set="nb_val" t-value="0"/>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <t t-if="docs.location_ids">
+                                <t t-foreach="docs.location_ids" t-as="location_id">
+                                   <t t-value="get_products(docs)" t-set="product_ids"/>
+                                   <t t-foreach="product_ids" t-as="product_id">
+                                      <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                      <t t-foreach="sm_values" t-as="sm_value">
+                                        <t t-if="sm_value.location_dest_id.id == location_id.id ">
+
+                                              <t t-if="sm_value.product_id.name=='JETA1'">
+
+                                                 <t t-set="nb_val" t-value="nb_val+1"/>
+                                                 <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                 <t t-set="total_val_5" t-value="total_val_5+sm_value.quantity_done"/>
+                                              </t>
+
+                                        </t>
+                                         </t>
+                                      </t>
+                                   </t>
+                                </t>
+                             
+                             <t t-if="nb_val &gt; 0">
+                                <span t-esc="product_sum_product_qty_ttc"/>
+                             </t>
+                             <t t-if="nb_val == 0">
+                                <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                   <![CDATA[&nbsp;]]>
+                                </p>
+                             </t>
+                          </td>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                          <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                          <t t-set="nb_val" t-value="0"/>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <t t-if="docs.location_ids">
+                                <t t-foreach="docs.location_ids" t-as="location_id">
+                                   <t t-value="get_products(docs)" t-set="product_ids"/>
+                                   <t t-foreach="product_ids" t-as="product_id">
+                                      <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                      <t t-foreach="sm_values" t-as="sm_value">
+                                        <t t-if="sm_value.location_dest_id.id == location_id.id ">
+
+                                              <t t-if="sm_value.product_id.name=='MELANGE PÊCHE'">
+
+                                                 <t t-set="nb_val" t-value="nb_val+1"/>
+                                                 <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                 <t t-set="total_val_6" t-value="total_val_6+sm_value.quantity_done"/>
+                                              </t>
+
+                                        </t>
+                                         </t>
+                                      </t>
+                                   </t>
+                                </t>
+                             
+                             <t t-if="nb_val &gt; 0">
+                                <span t-esc="product_sum_product_qty_ttc"/>
+                             </t>
+                             <t t-if="nb_val == 0">
+                                <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                   <![CDATA[&nbsp;]]>
+                                </p>
+                             </t>
+                          </td>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                          <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                          <t t-set="nb_val" t-value="0"/>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <t t-if="docs.location_ids">
+                                <t t-foreach="docs.location_ids" t-as="location_id">
+                                   <t t-value="get_products(docs)" t-set="product_ids"/>
+                                   <t t-foreach="product_ids" t-as="product_id">
+                                      <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                      <t t-foreach="sm_values" t-as="sm_value">
+                                        <t t-if="sm_value.location_dest_id.id == location_id.id ">
+
+                                              <t t-if="sm_value.product_id.name=='PETROLE'">
+
+                                                 <t t-set="nb_val" t-value="nb_val+1"/>
+                                                 <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                 <t t-set="total_val_7" t-value="total_val_7+sm_value.quantity_done"/>
+                                              </t>
+
+                                        </t>
+                                         </t>
+                                      </t>
+                                   </t>
+                                </t>
+                             
+                             <t t-if="nb_val &gt; 0">
+                                <span t-esc="product_sum_product_qty_ttc"/>
+                             </t>
+                             <t t-if="nb_val == 0">
+                                <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                   <![CDATA[&nbsp;]]>
+                                </p>
+                             </t>
+                          </td>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                          <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                          <t t-set="nb_val" t-value="0"/>
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <t t-if="docs.location_ids">
+                                <t t-foreach="docs.location_ids" t-as="location_id">
+                                   <t t-value="get_products(docs)" t-set="product_ids"/>
+                                   <t t-foreach="product_ids" t-as="product_id">
+                                      <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                      <t t-foreach="sm_values" t-as="sm_value">
+                                        <t t-if="sm_value.location_dest_id.id == location_id.id ">
+
+                                              <t t-if="sm_value.product_id.name=='SUPER'">
+
+                                                 <t t-set="nb_val" t-value="nb_val+1"/>
+                                                 <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                 <t t-set="total_val_8" t-value="total_val_8+sm_value.quantity_done"/>
+                                              </t>
+
+                                        </t>
+                                         </t>
+                                      </t>
+                                   </t>
+                                </t>
+                             
+                             <t t-if="nb_val &gt; 0">
+                                <span t-esc="product_sum_product_qty_ttc"/>
+                             </t>
+                             <t t-if="nb_val == 0">
+                                <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                   <![CDATA[&nbsp;]]>
+                                </p>
+                             </t>
+                          </td>
+                       </tr>
+                    </table>
+                 </t>
+       
+                       
+                       
+                       
+                
+                       
+                       
+                       
+        <t t-foreach="docs.warehouse_ids" t-as="warehouse">
+                    <t t-if="docs.location_ids">
+                       <t t-set="location_ids" t-value="get_warehouse_wise_location(docs,warehouse)"/>
+                    </t>
+                    <table style="border-collapse:collapse;width:100%;margin-top:-12px">
+                       <tr>
+                          <td class="text-center" style="width:20%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;" >
+                             <p style="font-weight:bold;font-style:italic;margin-top:12px">
+                                <span>TOTAL (A):</span>
+                             </p>
+                          </td>
+
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                           <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;margin-top:12px">
+                                <span t-esc="total_val_1"/>
+                             </p>
+                          </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                           <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                            <p style="font-weight:bold;margin-top:12px">
+                                <span t-esc="total_val_2"/>
+                             </p>
+                          </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                         <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;margin-top:12px">
+                                <span t-esc="total_val_3"/>
+                             </p>
+                          </td>
+                           <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                           <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                            <p style="font-weight:bold;margin-top:12px">
+                                <span t-esc="total_val_4"/>
+                             </p>
+                          </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                           <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;margin-top:12px">
+                                <span t-esc="total_val_5"/>
+                             </p>
+                          </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                            <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;margin-top:12px">
+                                <span t-esc="total_val_6"/>
+                             </p>
+                          </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                          <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                            <p style="font-weight:bold;margin-top:12px">
+                                <span t-esc="total_val_7"/>
+                             </p>
+                          </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                           <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;margin-top:12px">
+                                <span t-esc="total_val_8"/>
+                             </p>
+                          </td>
+                       </tr>
+                    </table>
+                 </t>
+       
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+               <t t-foreach="docs.warehouse_ids" t-as="warehouse">
+                     <t t-if="docs.location_ids">
+                        <t t-set="location_ids" t-value="get_warehouse_wise_location(docs,warehouse)"/>
+                     </t>
+                     <table style="border-collapse:collapse;width:100%;margin-top:1px">
+                        <tr>
+                           <td class="text-center" style="width:15%;border-left:1px solid;border-right:1px solid;vertical-align:middle;" rowspan="4">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;">
+                                 <span>SORTIES :</span>
+                              </p>
+                           </td>
+                           <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;margin-left:4px;">
+                                 <span>TTC</span>
+                              </p>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'TTC'">
+                                                <t t-if="sm_value.product_id.name=='DIESEL'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'TTC'">
+                                                <t t-if="sm_value.product_id.name=='ESSENCE ORDINAIRE'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'TTC'">
+                                                <t t-if="sm_value.product_id.name=='FUEL 180'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'TTC'">
+                                                <t t-if="sm_value.product_id.name=='GASOIL'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'TTC'">
+                                                <t t-if="sm_value.product_id.name=='JETA1'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'TTC'">
+                                                <t t-if="sm_value.product_id.name=='MELANGE PÊCHE'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'TTC'">
+                                                <t t-if="sm_value.product_id.name=='PETROLE'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'TTC'">
+                                                <t t-if="sm_value.product_id.name=='SUPER'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;margin-left:4px;">
+                                 <span>HT</span>
+                              </p>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'HT'">
+                                                <t t-if="sm_value.product_id.name=='DIESEL'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'HT'">
+                                                <t t-if="sm_value.product_id.name=='ESSENCE ORDINAIRE'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'HT'">
+                                                <t t-if="sm_value.product_id.name=='FUEL 180'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'HT'">
+                                                <t t-if="sm_value.product_id.name=='GASOIL'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'HT'">
+                                                <t t-if="sm_value.product_id.name=='JETA1'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'HT'">
+                                                <t t-if="sm_value.product_id.name=='MELANGE PÊCHE'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'HT'">
+                                                <t t-if="sm_value.product_id.name=='PETROLE'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                 <![CDATA[&nbsp;]]>
+                              </p>
+                           </td>
+                           <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+                           <t t-set="nb_val" t-value="0"/>
+                           <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <t t-if="docs.location_ids">
+                                 <t t-foreach="docs.location_ids" t-as="location_id">
+                                    <t t-value="get_products(docs)" t-set="product_ids"/>
+                                    <t t-foreach="product_ids" t-as="product_id">
+                                       <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                       <t t-foreach="sm_values" t-as="sm_value">
+                                          <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                                             <t t-if="sm_value.picking_id.douan.name == 'HT'">
+                                                <t t-if="sm_value.product_id.name=='SUPER'">
+                                                   <t t-set="nb_val" t-value="nb_val+1"/>
+                                                   <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                                                </t>
+                                             </t>
+                                          </t>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                              <t t-if="nb_val &gt; 0">
+                                 <span t-esc="product_sum_product_qty_ttc"/>
+                              </t>
+                              <t t-if="nb_val == 0">
+                                 <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                    <![CDATA[&nbsp;]]>
+                                 </p>
+                              </t>
+                           </td>
+                        </tr>
+                        <tr>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <p style="font-weight:bold;font-style:italic;margin-top:10px;margin-left:4px;">
+      <span>EXP</span>
+   </p>
+</td>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+      <![CDATA[&nbsp;]]>
+   </p>
+</td>
+<t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+<t t-set="nb_val" t-value="0"/>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <t t-if="docs.location_ids">
+      <t t-foreach="docs.location_ids" t-as="location_id">
+         <t t-value="get_products(docs)" t-set="product_ids"/>
+         <t t-foreach="product_ids" t-as="product_id">
+            <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+            <t t-foreach="sm_values" t-as="sm_value">
+               <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                  <t t-if="sm_value.picking_id.douan.name == 'EXP'">
+                     <t t-if="sm_value.product_id.name=='DIESEL'">
+                        <t t-set="nb_val" t-value="nb_val+1"/>
+                        <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                     </t>
+                  </t>
+               </t>
+            </t>
+         </t>
+      </t>
+   </t>
+   <t t-if="nb_val &gt; 0">
+      <span t-esc="product_sum_product_qty_ttc"/>
+   </t>
+   <t t-if="nb_val == 0">
+      <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+         <![CDATA[&nbsp;]]>
+      </p>
+   </t>
+</td>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+      <![CDATA[&nbsp;]]>
+   </p>
+</td>
+<t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+<t t-set="nb_val" t-value="0"/>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <t t-if="docs.location_ids">
+      <t t-foreach="docs.location_ids" t-as="location_id">
+         <t t-value="get_products(docs)" t-set="product_ids"/>
+         <t t-foreach="product_ids" t-as="product_id">
+            <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+            <t t-foreach="sm_values" t-as="sm_value">
+               <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                  <t t-if="sm_value.picking_id.douan.name == 'EXP'">
+                     <t t-if="sm_value.product_id.name=='ESSENCE ORDINAIRE'">
+                        <t t-set="nb_val" t-value="nb_val+1"/>
+                        <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                     </t>
+                  </t>
+               </t>
+            </t>
+         </t>
+      </t>
+   </t>
+   <t t-if="nb_val &gt; 0">
+      <span t-esc="product_sum_product_qty_ttc"/>
+   </t>
+   <t t-if="nb_val == 0">
+      <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+         <![CDATA[&nbsp;]]>
+      </p>
+   </t>
+</td>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+      <![CDATA[&nbsp;]]>
+   </p>
+</td>
+<t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+<t t-set="nb_val" t-value="0"/>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <t t-if="docs.location_ids">
+      <t t-foreach="docs.location_ids" t-as="location_id">
+         <t t-value="get_products(docs)" t-set="product_ids"/>
+         <t t-foreach="product_ids" t-as="product_id">
+            <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+            <t t-foreach="sm_values" t-as="sm_value">
+               <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                  <t t-if="sm_value.picking_id.douan.name == 'EXP'">
+                     <t t-if="sm_value.product_id.name=='FUEL 180'">
+                        <t t-set="nb_val" t-value="nb_val+1"/>
+                        <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                     </t>
+                  </t>
+               </t>
+            </t>
+         </t>
+      </t>
+   </t>
+   <t t-if="nb_val &gt; 0">
+      <span t-esc="product_sum_product_qty_ttc"/>
+   </t>
+   <t t-if="nb_val == 0">
+      <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+         <![CDATA[&nbsp;]]>
+      </p>
+   </t>
+</td>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+      <![CDATA[&nbsp;]]>
+   </p>
+</td>
+<t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+<t t-set="nb_val" t-value="0"/>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <t t-if="docs.location_ids">
+      <t t-foreach="docs.location_ids" t-as="location_id">
+         <t t-value="get_products(docs)" t-set="product_ids"/>
+         <t t-foreach="product_ids" t-as="product_id">
+            <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+            <t t-foreach="sm_values" t-as="sm_value">
+               <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                  <t t-if="sm_value.picking_id.douan.name == 'EXP'">
+                     <t t-if="sm_value.product_id.name=='GASOIL'">
+                        <t t-set="nb_val" t-value="nb_val+1"/>
+                        <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                     </t>
+                  </t>
+               </t>
+            </t>
+         </t>
+      </t>
+   </t>
+   <t t-if="nb_val &gt; 0">
+      <span t-esc="product_sum_product_qty_ttc"/>
+   </t>
+   <t t-if="nb_val == 0">
+      <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+         <![CDATA[&nbsp;]]>
+      </p>
+   </t>
+</td>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+      <![CDATA[&nbsp;]]>
+   </p>
+</td>
+<t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+<t t-set="nb_val" t-value="0"/>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <t t-if="docs.location_ids">
+      <t t-foreach="docs.location_ids" t-as="location_id">
+         <t t-value="get_products(docs)" t-set="product_ids"/>
+         <t t-foreach="product_ids" t-as="product_id">
+            <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+            <t t-foreach="sm_values" t-as="sm_value">
+               <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                  <t t-if="sm_value.picking_id.douan.name == 'EXP'">
+                     <t t-if="sm_value.product_id.name=='JETA1'">
+                        <t t-set="nb_val" t-value="nb_val+1"/>
+                        <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                     </t>
+                  </t>
+               </t>
+            </t>
+         </t>
+      </t>
+   </t>
+   <t t-if="nb_val &gt; 0">
+      <span t-esc="product_sum_product_qty_ttc"/>
+   </t>
+   <t t-if="nb_val == 0">
+      <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+         <![CDATA[&nbsp;]]>
+      </p>
+   </t>
+</td>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+      <![CDATA[&nbsp;]]>
+   </p>
+</td>
+<t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+<t t-set="nb_val" t-value="0"/>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <t t-if="docs.location_ids">
+      <t t-foreach="docs.location_ids" t-as="location_id">
+         <t t-value="get_products(docs)" t-set="product_ids"/>
+         <t t-foreach="product_ids" t-as="product_id">
+            <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+            <t t-foreach="sm_values" t-as="sm_value">
+               <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                  <t t-if="sm_value.picking_id.douan.name == 'EXP'">
+                     <t t-if="sm_value.product_id.name=='MELANGE PÊCHE'">
+                        <t t-set="nb_val" t-value="nb_val+1"/>
+                        <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                     </t>
+                  </t>
+               </t>
+            </t>
+         </t>
+      </t>
+   </t>
+   <t t-if="nb_val &gt; 0">
+      <span t-esc="product_sum_product_qty_ttc"/>
+   </t>
+   <t t-if="nb_val == 0">
+      <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+         <![CDATA[&nbsp;]]>
+      </p>
+   </t>
+</td>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+      <![CDATA[&nbsp;]]>
+   </p>
+</td>
+<t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+<t t-set="nb_val" t-value="0"/>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <t t-if="docs.location_ids">
+      <t t-foreach="docs.location_ids" t-as="location_id">
+         <t t-value="get_products(docs)" t-set="product_ids"/>
+         <t t-foreach="product_ids" t-as="product_id">
+            <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+            <t t-foreach="sm_values" t-as="sm_value">
+               <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                  <t t-if="sm_value.picking_id.douan.name == 'EXP'">
+                     <t t-if="sm_value.product_id.name=='PETROLE'">
+                        <t t-set="nb_val" t-value="nb_val+1"/>
+                        <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                     </t>
+                  </t>
+               </t>
+            </t>
+         </t>
+      </t>
+   </t>
+   <t t-if="nb_val &gt; 0">
+      <span t-esc="product_sum_product_qty_ttc"/>
+   </t>
+   <t t-if="nb_val == 0">
+      <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+         <![CDATA[&nbsp;]]>
+      </p>
+   </t>
+</td>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+      <![CDATA[&nbsp;]]>
+   </p>
+</td>
+<t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+<t t-set="nb_val" t-value="0"/>
+<td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+   <t t-if="docs.location_ids">
+      <t t-foreach="docs.location_ids" t-as="location_id">
+         <t t-value="get_products(docs)" t-set="product_ids"/>
+         <t t-foreach="product_ids" t-as="product_id">
+            <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+            <t t-foreach="sm_values" t-as="sm_value">
+               <t t-if="sm_value.picking_code in ['outgoing', 'internal']">
+                  <t t-if="sm_value.picking_id.douan.name == 'EXP'">
+                     <t t-if="sm_value.product_id.name=='SUPER'">
+                        <t t-set="nb_val" t-value="nb_val+1"/>
+                        <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                     </t>
+                  </t>
+               </t>
+            </t>
+         </t>
+      </t>
+   </t>
+   <t t-if="nb_val &gt; 0">
+      <span t-esc="product_sum_product_qty_ttc"/>
+   </t>
+   <t t-if="nb_val == 0">
+      <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+         <![CDATA[&nbsp;]]>
+      </p>
+   </t>
+</td>
+                        </tr>
+                     </table>
+                  </t>
+     
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+
+
+
+
+
+
+
+     <t t-set="total_val_1b" t-value="0"/>
+   <t t-set="total_val_2b" t-value="0"/>
+   <t t-set="total_val_3b" t-value="0"/>
+   <t t-set="total_val_4b" t-value="0"/>
+   <t t-set="total_val_5b" t-value="0"/>
+   <t t-set="total_val_6b" t-value="0"/>
+   <t t-set="total_val_7b" t-value="0"/>
+   <t t-set="total_val_8b" t-value="0"/>
+ <t t-foreach="docs.warehouse_ids" t-as="warehouse">
+ <t t-if="docs.location_ids">
+    <t t-set="location_ids" t-value="get_warehouse_wise_location(docs,warehouse)"/>
+ </t>
+ <table style="border-collapse:collapse;width:100%;margin-top:1px">
+    <tr>
+       <td class="text-center" style="width:20%;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;" rowspan="4">
+          <p style="font-weight:bold;font-style:italic;margin-top:10px;color:white">
+             <span>entree:</span>
+          </p>
+       </td>
+
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+             <![CDATA[&nbsp;]]>
+          </p>
+       </td>
+       <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+       <t t-set="nb_val" t-value="0"/>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <t t-if="docs.location_ids">
+             <t t-foreach="docs.location_ids" t-as="location_id">
+                <t t-value="get_products(docs)" t-set="product_ids"/>
+                <t t-foreach="product_ids" t-as="product_id">
+                   <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                   <t t-foreach="sm_values" t-as="sm_value">
+                      <t t-if="sm_value.location_id.id == location_id.id  and sm_value.picking_code == 'outgoing' ">
+
+                            <t t-if="sm_value.product_id.name=='DIESEL'">
+
+                               <t t-set="nb_val" t-value="nb_val+1"/>
+                               <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                               <t t-set="total_val_1b" t-value="total_val_1b+sm_value.quantity_done"/>
+                            </t>
+
+                      </t>
+                   </t>
+                </t>
+             </t>
+          </t>
+         
+          
+       </td>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+             <![CDATA[&nbsp;]]>
+          </p>
+       </td>
+       <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+       <t t-set="nb_val" t-value="0"/>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <t t-if="docs.location_ids">
+             <t t-foreach="docs.location_ids" t-as="location_id">
+                <t t-value="get_products(docs)" t-set="product_ids"/>
+                <t t-foreach="product_ids" t-as="product_id">
+                   <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                   <t t-foreach="sm_values" t-as="sm_value">
+                     <t t-if="sm_value.location_id.id == location_id.id  and sm_value.picking_code == 'outgoing' ">
+
+                           <t t-if="sm_value.product_id.name=='ESSENCE ORDINAIRE'">
+
+                              <t t-set="nb_val" t-value="nb_val+1"/>
+                              <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                              <t t-set="total_val_2b" t-value="total_val_2b+sm_value.quantity_done"/>
+                           </t>
+
+                     </t>
+
+                      </t>
+                   </t>
+                </t>
+             </t>
+          
+        
+       </td>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+             <![CDATA[&nbsp;]]>
+          </p>
+       </td>
+       <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+       <t t-set="nb_val" t-value="0"/>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <t t-if="docs.location_ids">
+             <t t-foreach="docs.location_ids" t-as="location_id">
+                <t t-value="get_products(docs)" t-set="product_ids"/>
+                <t t-foreach="product_ids" t-as="product_id">
+                   <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                   <t t-foreach="sm_values" t-as="sm_value">
+                     <t t-if="sm_value.location_id.id == location_id.id ">
+
+                           <t t-if="sm_value.product_id.name=='FUEL 180'  and sm_value.picking_code == 'outgoing' ">
+
+                              <t t-set="nb_val" t-value="nb_val+1"/>
+                              <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                              <t t-set="total_val_3b" t-value="total_val_3b+sm_value.quantity_done"/>
+                           </t>
+
+                     </t>
+                      </t>
+                   </t>
+                </t>
+             </t>
+          
+        
+       </td>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+             <![CDATA[&nbsp;]]>
+          </p>
+       </td>
+       <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+       <t t-set="nb_val" t-value="0"/>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <t t-if="docs.location_ids">
+             <t t-foreach="docs.location_ids" t-as="location_id">
+                <t t-value="get_products(docs)" t-set="product_ids"/>
+                <t t-foreach="product_ids" t-as="product_id">
+                   <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                   <t t-foreach="sm_values" t-as="sm_value">
+                     <t t-if="sm_value.location_id.id == location_id.id ">
+
+                           <t t-if="sm_value.product_id.name=='GASOIL'  and sm_value.picking_code == 'outgoing' ">
+
+                              <t t-set="nb_val" t-value="nb_val+1"/>
+                              <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                              <t t-set="total_val_4b" t-value="total_val_4b+sm_value.quantity_done"/>
+                           </t>
+
+                     </t>
+                      </t>
+                   </t>
+                </t>
+             </t>
+          
+       
+         
+       </td>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+             <![CDATA[&nbsp;]]>
+          </p>
+       </td>
+       <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+       <t t-set="nb_val" t-value="0"/>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <t t-if="docs.location_ids">
+             <t t-foreach="docs.location_ids" t-as="location_id">
+                <t t-value="get_products(docs)" t-set="product_ids"/>
+                <t t-foreach="product_ids" t-as="product_id">
+                   <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                   <t t-foreach="sm_values" t-as="sm_value">
+                     <t t-if="sm_value.location_id.id == location_id.id ">
+
+                           <t t-if="sm_value.product_id.name=='JETA1'  and sm_value.picking_code == 'outgoing' ">
+
+                              <t t-set="nb_val" t-value="nb_val+1"/>
+                              <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                              <t t-set="total_val_5b" t-value="total_val_5b+sm_value.quantity_done"/>
+                           </t>
+
+                     </t>
+                      </t>
+                   </t>
+                </t>
+             </t>
+          
+         
+       </td>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+             <![CDATA[&nbsp;]]>
+          </p>
+       </td>
+       <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+       <t t-set="nb_val" t-value="0"/>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <t t-if="docs.location_ids">
+             <t t-foreach="docs.location_ids" t-as="location_id">
+                <t t-value="get_products(docs)" t-set="product_ids"/>
+                <t t-foreach="product_ids" t-as="product_id">
+                   <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                   <t t-foreach="sm_values" t-as="sm_value">
+                     <t t-if="sm_value.location_id.id == location_id.id ">
+
+                           <t t-if="sm_value.product_id.name=='MELANGE PÊCHE'  and sm_value.picking_code == 'outgoing' ">
+
+                              <t t-set="nb_val" t-value="nb_val+1"/>
+                              <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                              <t t-set="total_val_6b" t-value="total_val_6b+sm_value.quantity_done"/>
+                           </t>
+
+                     </t>
+                      </t>
+                   </t>
+                </t>
+             </t>
+          
+   
+       </td>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+             <![CDATA[&nbsp;]]>
+          </p>
+       </td>
+       <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+       <t t-set="nb_val" t-value="0"/>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <t t-if="docs.location_ids">
+             <t t-foreach="docs.location_ids" t-as="location_id">
+                <t t-value="get_products(docs)" t-set="product_ids"/>
+                <t t-foreach="product_ids" t-as="product_id">
+                   <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                   <t t-foreach="sm_values" t-as="sm_value">
+                     <t t-if="sm_value.location_id.id == location_id.id ">
+
+                           <t t-if="sm_value.product_id.name=='PETROLE'">
+
+                              <t t-set="nb_val" t-value="nb_val+1"/>
+                              <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                              <t t-set="total_val_7b" t-value="total_val_7b+sm_value.quantity_done"/>
+                           </t>
+
+                     </t>
+                      </t>
+                   </t>
+                </t>
+             </t>
+          
+         
+      
+       </td>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+             <![CDATA[&nbsp;]]>
+          </p>
+       </td>
+       <t t-set="product_sum_product_qty_ttc" t-value="0.0"/>
+       <t t-set="nb_val" t-value="0"/>
+       <td class="text-center" style="width:5%;border-bottom:1px solid white;border-left:1px solid white;border-right:1px solid white;vertical-align:middle;">
+          <t t-if="docs.location_ids">
+             <t t-foreach="docs.location_ids" t-as="location_id">
+                <t t-value="get_products(docs)" t-set="product_ids"/>
+                <t t-foreach="product_ids" t-as="product_id">
+                   <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                   <t t-foreach="sm_values" t-as="sm_value">
+                     <t t-if="sm_value.location_id.id == location_id.id ">
+
+                           <t t-if="sm_value.product_id.name=='SUPER'">
+
+                              <t t-set="nb_val" t-value="nb_val+1"/>
+                              <t t-set="product_sum_product_qty_ttc" t-value="product_sum_product_qty_ttc+sm_value.quantity_done"/>
+                              <t t-set="total_val_8b" t-value="total_val_8b+sm_value.quantity_done"/>
+                           </t>
+
+                     </t>
+                      </t>
+                   </t>
+                </t>
+             </t>
+          
+         
+       </td>
+    </tr>
+ </table>
+</t>
+
+    
+    
+    
+    
+    
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                <t t-foreach="docs.warehouse_ids" t-as="warehouse">
+                    <t t-if="docs.location_ids">
+                       <t t-set="location_ids" t-value="get_warehouse_wise_location(docs,warehouse)"/>
+                    </t>
+                    <table style="border-collapse:collapse;width:100%;margin-top:-50px;">
+                       <tr>
+                          <td class="text-center" style="width:20%;border-left:1px solid;border-right:1px solid;vertical-align:middle;border-top:1px solid" >
+                             <p style="font-weight:bold;font-style:italic;margin-top:12px">
+                                <span>TOTAL (B):</span>
+                             </p>
+                          </td>
+
+                          <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                             <p style="font-weight:bold;font-style:italic;">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                           <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;margin-top:12px">
+                             
+                                <span t-esc="'{0:,.0f}'.format(total_val_1b).replace(',', ' ')" />
+                             </p>
+                          </td>
+                           <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                          <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                            <p style="font-weight:bold;margin-top:12px">
+                              
+                                  <span t-esc="'{0:,.0f}'.format(total_val_2b).replace(',', ' ')" />
+                                
+                             </p>
+                          </td>
+                         <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                          <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;margin-top:12px">
+                              
+                                 <span t-esc="'{0:,.0f}'.format(total_val_3b).replace(',', ' ')" />
+                             </p>
+                          </td>
+                      <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                          <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                            <p style="font-weight:bold;margin-top:12px">
+                                <span t-esc="'{0:,.0f}'.format(total_val_4b).replace(',', ' ')" />
+                             </p>
+                          </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                       <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;margin-top:12px">
+                                
+                                 <span t-esc="'{0:,.0f}'.format(total_val_5b).replace(',', ' ')" />
+                             </p>
+                          </td>
+                         <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                      <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;margin-top:12px">
+                               
+                                 <span t-esc="'{0:,.0f}'.format(total_val_6b).replace(',', ' ')" />
+                             </p>
+                          </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                          <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                            <p style="font-weight:bold;margin-top:12px">
+                                
+                                <span t-esc="'{0:,.0f}'.format(total_val_7b).replace(',', ' ')" />
+                             </p>
+                          </td>
+                         <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                                <![CDATA[&nbsp;]]>
+                             </p>
+                          </td>
+                        <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                             <p style="font-weight:bold;margin-top:12px">
+                              
+                                 
+                                 <span t-esc="'{0:,.0f}'.format(total_val_8b).replace(',', ' ')" />
+                             </p>
+                          </td>
+                       </tr>
+                    </table>
+                 </t>
+       
+    
+    
+    
+    
+    
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   <t t-foreach="docs.warehouse_ids" t-as="warehouse">
+                <t t-if="docs.location_ids">
+                   <t t-set="location_ids" t-value="get_warehouse_wise_location(docs,warehouse)"/>
+                </t>
+                <!-- Product Header -->
+                <table style="border-collapse:collapse;width:100%;margin-top:-4px">
+                   <tr>
+                      <td class="text-left" style="width:20%;border-left:1px solid;border-right:1px solid;vertical-align:middle;border-top:1px solid">
+                         <p style="font-weight:bold;font-style:italic;margin-top:10px;margin-left:4px;">
+                            <span>STOCK COMPTABLE (A-B):</span>
+                         </p>
+                      </td>
+                    
+                    
+                       
+                       
+                         <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                        <p style="font-weight:bold;font-style:italic;">
+                           <![CDATA[&nbsp;]]>
+                        </p>
+                     </td>
+                      <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;pdding-left:2px">
+                        <p style="font-weight:bold;margin-top:12px">
+                           
+                          <span t-esc="'{0:,.0f}'.format(total_val_1-total_val_1b).replace(',', ' ')" />
+
+                        </p>
+                     </td>
+                      <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                        <p style="font-weight:bold;font-style:italic;margin-top:10px;">
+                           <![CDATA[&nbsp;]]>
+                        </p>
+                     </td>
+                      <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                       <p style="font-weight:bold;margin-top:12px">
+                            <span t-esc="'{0:,.0f}'.format(total_val_2-total_val_2b).replace(',', ' ')" />
+
+                        </p>
+                     </td>
+                      <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                        <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                           <![CDATA[&nbsp;]]>
+                        </p>
+                     </td>
+                   <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                        <p style="font-weight:bold;margin-top:12px">
+                   
+                           <span t-esc="'{0:,.0f}'.format(total_val_3-total_val_3b).replace(',', ' ')" />
+
+                        </p>
+                     </td>
+                   <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                        <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                           <![CDATA[&nbsp;]]>
+                        </p>
+                     </td>
+                     <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                        <p style="font-weight:bold;margin-top:12px">
+                   
+                           <span t-esc="'{0:,.0f}'.format(total_val_4-total_val_4b).replace(',', ' ')" />
+
+                        </p>
+                     </td>
+                      <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                        <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                           <![CDATA[&nbsp;]]>
+                        </p>
+                     </td>
+                    <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                        <p style="font-weight:bold;margin-top:12px">
+                   
+                           <span t-esc="'{0:,.0f}'.format(total_val_5-total_val_5b).replace(',', ' ')" />
+
+                        </p>
+                     </td>
+                      <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                        <p style="font-weight:bold;">
+                           <![CDATA[&nbsp;]]>
+                        </p>
+                     </td>
+                      <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                        <p style="font-weight:bold;margin-top:12px">
+                   
+                           <span t-esc="'{0:,.0f}'.format(total_val_6-total_val_6b).replace(',', ' ')" />
+
+                        </p>
+                     </td>
+                      <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                        <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                           <![CDATA[&nbsp;]]>
+                        </p>
+                     </td>
+                     <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                        <p style="font-weight:bold;margin-top:12px">
+                   
+                           <span t-esc="'{0:,.0f}'.format(total_val_7-total_val_7b).replace(',', ' ')" />
+
+                        </p>
+                     </td>
+                      <td class="text-center" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                        <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px">
+                           <![CDATA[&nbsp;]]>
+                        </p>
+                     </td>
+                     <td class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                        <p style="font-weight:bold;margin-top:12px">
+                   
+                           <span t-esc="'{0:,.0f}'.format(total_val_8-total_val_8b).replace(',', ' ')" />
+
+                        </p>
+                     </td>
+                       
+                       
+                   </tr>
+                </table>
+             </t>
+                   
+                   
+                   
+                   
+                   
+                   
+                
+                   
+                   
+                   
+                   
+                   
+                  <t t-foreach="docs.warehouse_ids" t-as="warehouse">
+                     <t t-if="docs.location_ids">
+                        <t t-set="location_ids" t-value="get_warehouse_wise_location(docs,warehouse)"/>
+                     </t>
+                     <!-- Product Header -->
+                     <table style="border-collapse:collapse;width:100%;margin-top:-4px">
+                        <tr>
+                           <td class="text-left" style="width:20%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;border-top:1px solid">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;margin-left:4px;">
+                                 <span>AJUSTEMENT STOCK:</span>
+                              </p>
+                           </td>
+                           <t t-set="sum_begning" t-value="0.0"/>
+                           <t t-set="sum_product_qty_in" t-value="0.0"/>
+                           <t t-set="sum_product_qty_out" t-value="0.0"/>
+                           <t t-set="sum_product_qty_internal" t-value="0.0"/>
+                           <t t-set="sum_product_qty_adjustment" t-value="0.0"/>
+                           <t t-if="not docs.group_by_categ">
+                              <t t-if="docs.location_ids">
+                                 <t t-set="product_sum_begning" t-value="0.0"/>
+                                 <t t-set="product_sum_product_qty_in" t-value="0.0"/>
+                                 <t t-set="product_sum_product_qty_out" t-value="0.0"/>
+                                 <t t-set="product_sum_product_qty_internal" t-value="0.0"/>
+                                 <t t-set="product_sum_product_qty_adjustment" t-value="0.0"/>
+                                 <t t-foreach="get_products(docs)" t-as="product">
+                                    <span t-set="location_data" t-value="get_location_wise_product(docs,warehouse,product,location_ids)"/>
+                                    <td  class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                                       <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px">
+                                          <![CDATA[&nbsp;]]>
+                                       </p>
+                                    </td>
+                                    <td  class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                                      
+                                       <span t-esc="'{0:,.0f}'.format(location_data[1][4]).replace(',', ' ')" />
+
+                                    </td>
+                                    <!--<tr t-foreach="location_data[0]" t-as="l">
+                                       <td></td>
+                                       <td>
+                                           <span t-esc="l.display_name"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[0]"/>
+                                           <t t-set="product_sum_begning" t-value="product_sum_begning + l_value[0]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[1]"/>
+                                           <t t-set="product_sum_product_qty_in" t-value="product_sum_product_qty_in + l_value[1]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="abs(l_value[2])"/>
+                                           <t t-set="product_sum_product_qty_out" t-value="product_sum_product_qty_out + l_value[2]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[3]"/>
+                                           <t t-set="product_sum_product_qty_internal" t-value="product_sum_product_qty_internal + l_value[3]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[4]"/>
+                                           <t t-set="product_sum_product_qty_adjustment" t-value="product_sum_product_qty_adjustment + l_value[4]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[5]"/>
+                                       </td>
+                                       </tr>-->
+                                 </t>
+                                 <!--<tr>
+                                    <th style="border-top: 2px solid black">Total</th>
+                                    <th style="border-top: 2px solid black"></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="product_sum_begning"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="product_sum_product_qty_in"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="abs(product_sum_product_qty_out)"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="product_sum_product_qty_internal"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="product_sum_product_qty_adjustment"/></th>
+                                    <th style="border-top: 2px solid black">
+                                        <span t-esc="product_sum_begning + product_sum_product_qty_in + product_sum_product_qty_out + 
+                                                    product_sum_product_qty_internal + product_sum_product_qty_adjustment "/>
+                                    </th>
+                                    </tr>-->
+                              </t>
+                              <t t-if="not docs.location_ids">
+                                 <t t-foreach="get_products(docs)" t-as="product">
+                                    <t t-set="ending_qty" t-value="0.00"/>
+                                    <t t-value="get_beginning_inventory(docs,product,warehouse)" t-set="product_beg_qty"/>
+                                    <t t-value="get_product_sale_qty(docs,warehouse,product)" t-set="product_val"/>
+                                    <t t-set="ending_qty"
+                                       t-value="product_beg_qty + product_val['product_qty_in'] + product_val['product_qty_out'] +
+                                       product_val['product_qty_internal'] + product_val['product_qty_adjustment']"/>
+                                    <!--<tr>
+                                       <td><span t-esc="product.name_get()[0][1]"/></td>
+                                       <td>
+                                           <span t-esc="product_beg_qty"/>
+                                           <t t-set="sum_begning" t-value="sum_begning + product_beg_qty"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="product_val['product_qty_in']"/>
+                                           <t t-set="sum_product_qty_in" t-value="sum_product_qty_in + product_val['product_qty_in']"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="abs(product_val['product_qty_out'])"/>
+                                           <t t-set="sum_product_qty_out" t-value="sum_product_qty_out + product_val['product_qty_out']"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="product_val['product_qty_internal']"/>
+                                           <t t-set="sum_product_qty_internal" t-value="sum_product_qty_internal + product_val['product_qty_internal']"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="product_val['product_qty_adjustment']"/>
+                                           <t t-set="sum_product_qty_adjustment" t-value="sum_product_qty_adjustment + product_val['product_qty_adjustment']"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="product_beg_qty + product_val['product_qty_in'] +
+                                                   product_val['product_qty_out'] + product_val['product_qty_internal'] +
+                                                   product_val['product_qty_adjustment']"/>
+                                       </td>
+                                       </tr>-->
+                                 </t>
+                                 <!--<tr>
+                                    <th style="border-top: 2px solid black">Grand Total</th>
+                                    <th style="border-top: 2px solid black"><span t-esc="sum_begning"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="sum_product_qty_in"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="abs(sum_product_qty_out)"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="sum_product_qty_internal"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="sum_product_qty_adjustment"/></th>
+                                    <th style="border-top: 2px solid black">
+                                        <span t-esc="sum_begning + sum_product_qty_in + sum_product_qty_out + sum_product_qty_internal 
+                                                    + sum_product_qty_adjustment "/>
+                                    </th>
+                                    </tr>-->
+                              </t>
+                              <!--Group By Category wise  -->
+                              <!--<t t-if="docs.group_by_categ">
+                                 <t t-value="get_product_sale_qty(docs,warehouse,product=None)" t-set="product_val"/>
+                                 <t t-foreach="product_val" t-as="product_categ">
+                                     <t t-set="sum_categ_begning" t-value="0.0"/>
+                                     <t t-set="sum_categ_product_qty_in" t-value="0.0"/>
+                                     <t t-set="sum_categ_product_qty_out" t-value="0.0"/>
+                                     <t t-set="sum_categ_product_qty_internal" t-value="0.0"/>
+                                     <t t-set="sum_categ_product_qty_adjustment" t-value="0.0"/>
+                                     <span t-set="product_categ_id" t-value="request.env['product.category'].browse(product_categ)"/>
+                                     <tr style="background-color:darkgrey;">
+                                         <td><span t-esc="product_categ_id.name"/></td>
+                                         <td colspan="6"/>
+                                         <td t-if="docs.location_ids"></td>
+                                     </tr>
+                                     <t t-foreach="product_categ_value" t-as="product_categ_data">
+                                         <t t-set="product_id" t-value="product_categ_data['product_id']"/>
+                                         <t t-value="get_beginning_inventory(docs,product_id,warehouse)" t-set="product_beg_qty"/>
+                                         <span t-set="total_ending" t-value=" product_beg_qty + product_categ_data['product_qty_in'] +
+                                               product_categ_data['product_qty_out'] + product_categ_data['product_qty_internal'] +
+                                               product_categ_data['product_qty_adjustment']"/>
+                                         <span t-set="product_id" t-value="request.env['product.product'].browse(product_id)"/>
+                                 
+                                         <t t-if="docs.location_ids">
+                                             <span t-set="location_data" t-value="get_location_wise_product(docs,warehouse,product_id,location_ids,product_categ_id)"/>
+                                             <t t-set="product_sum_begning" t-value="0.0"/>
+                                             <t t-set="product_sum_product_qty_in" t-value="0.0"/>
+                                             <t t-set="product_sum_product_qty_out" t-value="0.0"/>
+                                             <t t-set="product_sum_product_qty_internal" t-value="0.0"/>
+                                             <t t-set="product_sum_product_qty_adjustment" t-value="0.0"/>
+                                             <tr>
+                                                 <td>
+                                                     <span t-esc="product_id.display_name"/>
+                                                 </td>
+                                                 <td></td>
+                                                 <td style="font-weight:bold;"><span t-esc="location_data[1][0]"/></td>
+                                                 <td style="font-weight:bold;"><span t-esc="location_data[1][1]"/></td>
+                                                 <td style="font-weight:bold;"><span t-esc="abs(location_data[1][2])"/></td>
+                                                 <td style="font-weight:bold;"><span t-esc="location_data[1][3]"/></td>
+                                                 <td style="font-weight:bold;"><span t-esc="location_data[1][4]"/></td>
+                                                 <td style="font-weight:bold;"><span t-esc="location_data[1][5]"/></td>
+                                             </tr>
+                                 
+                                         </t>
+                                     </t>
+                                    
+                                 </t>
+                                 </t>-->
+                           </t>
+                        </tr>
+                     </table>
+                  </t>
+                  <t t-foreach="docs.warehouse_ids" t-as="warehouse">
+                     <t t-if="docs.location_ids">
+                        <t t-set="location_ids" t-value="get_warehouse_wise_location(docs,warehouse)"/>
+                     </t>
+                     <!-- Product Header -->
+                     <table style="border-collapse:collapse;width:100%;margin-top:-7px">
+                        <tr>
+                           <td class="text-left" style="width:20%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                              <p style="font-weight:bold;font-style:italic;margin-top:10px;margin-left:4px;">
+                                 <span>STOCK AU :</span>
+                                 <span style="margin-left:44px">
+                                 <span t-esc="(docs.end_date).strftime('%d-%m-%Y')" />
+                                 </span>
+                              </p>
+                           </td>
+                           <t t-set="sum_begning" t-value="0.0"/>
+                           <t t-set="sum_product_qty_in" t-value="0.0"/>
+                           <t t-set="sum_product_qty_out" t-value="0.0"/>
+                           <t t-set="sum_product_qty_internal" t-value="0.0"/>
+                           <t t-set="sum_product_qty_adjustment" t-value="0.0"/>
+                           <t t-if="not docs.group_by_categ">
+                              <t t-if="docs.location_ids">
+                                 <t t-set="product_sum_begning" t-value="0.0"/>
+                                 <t t-set="product_sum_product_qty_in" t-value="0.0"/>
+                                 <t t-set="product_sum_product_qty_out" t-value="0.0"/>
+                                 <t t-set="product_sum_product_qty_internal" t-value="0.0"/>
+                                 <t t-set="product_sum_product_qty_adjustment" t-value="0.0"/>
+                                 <t t-foreach="get_products(docs)" t-as="product">
+                                    <span t-set="location_data" t-value="get_location_wise_product(docs,warehouse,product,location_ids)"/>
+                                    <td  class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                                       <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px">
+                                          <![CDATA[&nbsp;]]>
+                                       </p>
+                                    </td>
+                                    <td  class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;padding-left:2px">
+                                            <p style="font-weight:bold;margin-top:12px">
+                                      
+                                             <span t-esc="'{0:,.0f}'.format(location_data[1][5]).replace(',', ' ')" />
+                                            </p>
+                                    </td>
+                               
+                                    <!--<tr t-foreach="location_data[0]" t-as="l">
+                                       <td></td>
+                                       <td>
+                                           <span t-esc="l.display_name"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[0]"/>
+                                           <t t-set="product_sum_begning" t-value="product_sum_begning + l_value[0]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[1]"/>
+                                           <t t-set="product_sum_product_qty_in" t-value="product_sum_product_qty_in + l_value[1]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="abs(l_value[2])"/>
+                                           <t t-set="product_sum_product_qty_out" t-value="product_sum_product_qty_out + l_value[2]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[3]"/>
+                                           <t t-set="product_sum_product_qty_internal" t-value="product_sum_product_qty_internal + l_value[3]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[4]"/>
+                                           <t t-set="product_sum_product_qty_adjustment" t-value="product_sum_product_qty_adjustment + l_value[4]"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="l_value[5]"/>
+                                       </td>
+                                       </tr>-->
+                                 </t>
+                                 <!--<tr>
+                                    <th style="border-top: 2px solid black">Total</th>
+                                    <th style="border-top: 2px solid black"></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="product_sum_begning"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="product_sum_product_qty_in"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="abs(product_sum_product_qty_out)"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="product_sum_product_qty_internal"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="product_sum_product_qty_adjustment"/></th>
+                                    <th style="border-top: 2px solid black">
+                                        <span t-esc="product_sum_begning + product_sum_product_qty_in + product_sum_product_qty_out + 
+                                                    product_sum_product_qty_internal + product_sum_product_qty_adjustment "/>
+                                    </th>
+                                    </tr>-->
+                              </t>
+                              <t t-if="not docs.location_ids">
+                                 <t t-foreach="get_products(docs)" t-as="product">
+                                    <t t-set="ending_qty" t-value="0.00"/>
+                                    <t t-value="get_beginning_inventory(docs,product,warehouse)" t-set="product_beg_qty"/>
+                                    <t t-value="get_product_sale_qty(docs,warehouse,product)" t-set="product_val"/>
+                                    <t t-set="ending_qty"
+                                       t-value="product_beg_qty + product_val['product_qty_in'] + product_val['product_qty_out'] +
+                                       product_val['product_qty_internal'] + product_val['product_qty_adjustment']"/>
+                                    <!--<tr>
+                                       <td><span t-esc="product.name_get()[0][1]"/></td>
+                                       <td>
+                                           <span t-esc="product_beg_qty"/>
+                                           <t t-set="sum_begning" t-value="sum_begning + product_beg_qty"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="product_val['product_qty_in']"/>
+                                           <t t-set="sum_product_qty_in" t-value="sum_product_qty_in + product_val['product_qty_in']"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="abs(product_val['product_qty_out'])"/>
+                                           <t t-set="sum_product_qty_out" t-value="sum_product_qty_out + product_val['product_qty_out']"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="product_val['product_qty_internal']"/>
+                                           <t t-set="sum_product_qty_internal" t-value="sum_product_qty_internal + product_val['product_qty_internal']"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="product_val['product_qty_adjustment']"/>
+                                           <t t-set="sum_product_qty_adjustment" t-value="sum_product_qty_adjustment + product_val['product_qty_adjustment']"/>
+                                       </td>
+                                       <td>
+                                           <span t-esc="product_beg_qty + product_val['product_qty_in'] +
+                                                   product_val['product_qty_out'] + product_val['product_qty_internal'] +
+                                                   product_val['product_qty_adjustment']"/>
+                                       </td>
+                                       </tr>-->
+                                 </t>
+                                 <!--<tr>
+                                    <th style="border-top: 2px solid black">Grand Total</th>
+                                    <th style="border-top: 2px solid black"><span t-esc="sum_begning"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="sum_product_qty_in"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="abs(sum_product_qty_out)"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="sum_product_qty_internal"/></th>
+                                    <th style="border-top: 2px solid black"><span t-esc="sum_product_qty_adjustment"/></th>
+                                    <th style="border-top: 2px solid black">
+                                        <span t-esc="sum_begning + sum_product_qty_in + sum_product_qty_out + sum_product_qty_internal 
+                                                    + sum_product_qty_adjustment "/>
+                                    </th>
+                                    </tr>-->
+                              </t>
+                              <!--Group By Category wise  -->
+                              <t t-if="docs.group_by_categ">
+                                 <t t-value="get_product_sale_qty(docs,warehouse,product=None)" t-set="product_val"/>
+                                 <t t-foreach="product_val" t-as="product_categ">
+                                    <t t-set="sum_categ_begning" t-value="0.0"/>
+                                    <t t-set="sum_categ_product_qty_in" t-value="0.0"/>
+                                    <t t-set="sum_categ_product_qty_out" t-value="0.0"/>
+                                    <t t-set="sum_categ_product_qty_internal" t-value="0.0"/>
+                                    <t t-set="sum_categ_product_qty_adjustment" t-value="0.0"/>
+                                    <span t-set="product_categ_id" t-value="request.env['product.category'].browse(product_categ)"/>
+                                    <t t-foreach="product_categ_value" t-as="product_categ_data">
+                                       <t t-set="product_id" t-value="product_categ_data['product_id']"/>
+                                       <t t-value="get_beginning_inventory(docs,product_id,warehouse)" t-set="product_beg_qty"/>
+                                       <span t-set="total_ending" t-value=" product_beg_qty + product_categ_data['product_qty_in'] +
+                                          product_categ_data['product_qty_out'] + product_categ_data['product_qty_internal'] +
+                                          product_categ_data['product_qty_adjustment']"/>
+                                       <span t-set="product_id" t-value="request.env['product.product'].browse(product_id)"/>
+                                       <t t-if="docs.location_ids">
+                                          <span t-set="location_data" t-value="get_location_wise_product(docs,warehouse,product_id,location_ids,product_categ_id)"/>
+                                          <t t-set="product_sum_begning" t-value="0.0"/>
+                                          <t t-set="product_sum_product_qty_in" t-value="0.0"/>
+                                          <t t-set="product_sum_product_qty_out" t-value="0.0"/>
+                                          <t t-set="product_sum_product_qty_internal" t-value="0.0"/>
+                                          <t t-set="product_sum_product_qty_adjustment" t-value="0.0"/>
+                                          <td>
+                                             <span t-esc="location_data[1][0]"/>
+                                          </td>
+                                          <td  class="text-left" style="width:5%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                                             <p style="font-weight:bold;font-style:italic;margin-top:10px;font-size:12px;margin-left:2px">
+                                                <![CDATA[&nbsp;]]>
+                                             </p>
+                                          </td>
+                                       </t>
+                                    </t>
+                                 </t>
+                              </t>
+                           </t>
+                        </tr>
+                     </table>
+                  </t>
+                  <table style="border-collapse:collapse;width:100%;margin-top:-1px">
+                     <tr>
+                        <td class="text-center" style="width:100%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;color:white">MOIS: octobre 2020</p>
+                        </td>
+                     </tr>
+                  </table>
+                  <table style="border-collapse:collapse;width:100%;margin-top:-1px;height:48px">
+                     <tr>
+                        <td class="text-left" style="width:50%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;color:white">MOIS: octobre 2020</p>
+                        </td>
+                        <td class="text-left" style="width:50%;border-bottom:1px solid;border-left:1px solid;border-right:1px solid;vertical-align:middle;">
+                           <p style="font-weight:bold;font-style:italic;margin-top:10px;">Terminal Manager</p>
+                        </td>
+                     </tr>
+                  </table>
+                  <!-- Page Break -->
+                  <p style="page-break-before:always;" />
+                     <!-- </div> -->
+               </div>
+            </t>
+         </t>
+      </template>
+      <template id="stock_inventory_report">
+         <t t-call="web.html_container">
+            <!-- <t t-foreach="docs" t-as="doc"> -->
+            <t t-call="eq_stock_inventory_report.stock_inventory_report_template_document" />
+            <!-- </t> -->
+         </t>
+      </template>
+   </data>
+</odoo>

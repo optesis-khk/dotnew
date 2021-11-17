@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report
+            id="action_stock_inventory_template"
+            model="wizard.stock.inventory"
+            string="Stock Report"
+            report_type="qweb-pdf"
+            name="eq_stock_inventory_report.stock_inventory_report"
+            file="eq_stock_inventory_report.stock_inventory_report"
+            paperformat="eq_stock_inventory_report.optesis_stock_vivo_landscape"
+            menu="False"
+        />
+
+    </data>
+</odoo>

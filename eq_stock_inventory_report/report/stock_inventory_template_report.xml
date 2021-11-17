@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="stock_inventory_report_template_document">
+            <t t-call="eq_stock_inventory_report.stock_inventory_report_external_view">
+                <div class="page">
+                    <br/><br/>
+                    <style>
+                        #table_css {
+                            border: 1px solid black
+                            border-collapse: collapse;
+                            border-spacing : 0px;
+                            border-top-spacing : 0px;
+                        }
+                        #table_css td, #table_css th {
+                            border: 1px solid black
+                        }
+                        #table_css tr: {
+                            border: 1px solid black
+                        }
+                        #table_css th {
+                            style="border: 1px solid black"
+                        }
+                    </style>
+                        <t t-foreach="docs.warehouse_ids" t-as="warehouse">
+                            <t t-if="docs.location_ids">
+                                <t t-set="location_id" t-value="get_warehouse_wise_location(docs,warehouse)"/>
+                            </t>
+                            <div class="row">
+                                <div style="width:100%;font-size:18px;font-weight:bold;text-align:center;">
+                                    <span>ETAT DES STOCKS</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div style="width:70%;padding-left:15px;font-size:18px;">
+                                    <span >
+                                        Date:
+                                        <span t-esc="(docs.start_date).strftime('%d-%m-%Y')"/>
+                                        To
+                                        <span t-esc="(docs.end_date).strftime('%d-%m-%Y')"/>
+                                    </span>                                
+                                </div>
+                                <div style="font-size:18px;">
+                                    <span>
+                                        Warehouse: <span t-esc="warehouse.name"/>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Product Header -->
+                            <table class="table table-sm o_main_table" id="table_css">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Référence</th>
+                                        <th>Origine</th>
+                                        <th>destination</th>
+                                        <th>Date</th>
+                                        <th>Type d'Operation</th>
+                                        <th>Quantité</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody class="invoice_tbody">
+                                    <t t-if="docs.location_ids">
+                                        <t t-foreach="docs.location_ids" t-as="location_id">
+                                            <tr style="background-color:darkgrey;">
+                                                <td colspan="8" class="text-center">
+                                                    <span t-esc="location_id.display_name"/>
+                                                </td>
+                                            </tr>
+                                            <t t-value="get_products(docs)" t-set="product_ids"/>
+                                            <t t-foreach="product_ids" t-as="product_id">
+                                                <t t-set="product_sum_product_qty" t-value="0.0"/>
+                                                <tr>
+                                                    <td>
+                                                        <span t-esc="product_id.name"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <t t-value="get_stock_move_by_location(docs, location_id, product_id)" t-set="sm_values"/>
+                                                    <tr t-foreach="sm_values" t-as="sm_value">
+                                                        <td></td>
+                                                        <td>
+                                                            <t t-if="sm_value.picking_code == 'outgoing' and sm_value.picking_id.orde_chargement" t-esc="sm_value.picking_id.orde_chargement"/>
+                                                            <t t-if="sm_value.picking_code in ['incoming', 'internal'] and sm_value.picking_id.origin" t-esc="sm_value.picking_id.origin"/>
+                                                        </td>
+                                                        <td>
+                                                            <span t-esc="sm_value.location_id.display_name"/>
+                                                        </td>
+                                                        <td>
+                                                            <span t-esc="sm_value.location_dest_id.display_name"/>
+                                                        </td>
+                                                        <td>
+                                                            <span t-esc="sm_value.date"/>
+                                                        </td>
+                                                        <td>
+                                                            <t t-if="sm_value.picking_code == 'incoming'">Entrant</t>
+                                                            <t t-if="sm_value.picking_code == 'outgoing'">Sortant</t>
+                                                            <t t-if="sm_value.picking_code == 'internal'">Interne</t>
+                                                        </td>
+                                                        <td>
+                                                            <span t-esc="'{0:,.1f}'.format(sm_value.quantity_done).replace(',', '')"/>
+                                                            <t t-set="product_sum_product_qty" t-value="product_sum_product_qty + sm_value.quantity_done if sm_value.location_dest_id.id == location_id.id 
+                                                                                                        else product_sum_product_qty - sm_value.quantity_done"/>
+                                                        </td>
+                                                    </tr>
+                                                <tr>
+                                                    <th class="text-center">Total</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>
+                                                        <span t-esc="product_sum_product_qty"/>
+                                                    </th>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <!-- Page Break -->
+                            <p style="page-break-before:always;"/>
+                        </t>
+                    <!-- </div> -->
+                </div>
+            </t>
+        </template>
+
+        <template id="stock_inventory_report">
+            <t t-call="web.html_container">
+                <!-- <t t-foreach="docs" t-as="doc"> -->
+                <t t-call="eq_stock_inventory_report.stock_inventory_report_template_document"/>
+                <!-- </t> -->
+            </t>
+        </template>
+ 
+    </data>
+</odoo>
