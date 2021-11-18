@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        
+      <!-- Bon de pesée delphinus -->
+      
+	    <!--     <report
+            id="optesis_plan_chargement"
+            model="sale.order"
+            string="Plan de chargement"
+            report_type="qweb-pdf"
+            name="optesis_report.plan_chargement"
+            file="optesis_report.plan_chargement"
+       
+	    />-->
+        
+        <record id="paperformat_plan_chargement_2" model="report.paperformat">
+       <field name="name">Asiento contable</field>
+       <field name="orientation">Landscape</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+
+        <field name="margin_top">1</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">15</field>
+        <field name="dpi">90</field>
+</record>
+        
+        	
+        
+        
+         <report
+            id="optesis_plan_chargement_2"
+            model="sale.order"
+            string="Plan de chargement"
+            report_type="qweb-pdf"
+            name="optesis_report.plan_chargement_2"
+            file="optesis_report.plan_chargement_2"
+            paperformat="optesis_report.paperformat_plan_chargement_2"
+            />
+        
+                 
+                      
+
+  <template id="plan_chargement_2">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="optesis_report.optesis_external_view">
+          <div class="page">
+               <t t-call="optesis_report.header_new"/>
+             
+              
+              <!--
+               <table class="bpro_contained bpro-width" >
+                   
+                   
+                 
+                    <tr class="bpro_border_head">
+                        
+                         <td rowspan="5" colspan="5" align="center" class="bpro_border_left">
+                        <strong> <p class="document-type ">  DAKAR OCEAN <br/>TERMINAL</p> </strong>
+                      </td>
+                      <td rowspan="5" colspan="5" align="center" class="align-middle bpro_border_left ">
+                        <strong> <h4 style="text-align: center;" class="document-type ">PLAN DE CHARGEMENT</h4> </strong>
+                      </td>
+                      <td colspan="5" style="width:36%" align="center" class="bpro_border_left">
+                        Date de creation <br/><span t-field="o.date_order"/> 
+                         
+                      </td>
+                    </tr>
+                     <tr class="bpro_border_head">
+                      <td align="center" class="bpro_border_left">
+                      N°<span t-field="o.name"/>
+                      </td>
+                    </tr>
+                       </table>
+             
+              <style>
+                .container {
+                  min-height: 29.7cm;
+                }
+
+                .invoice {
+                  background: #fff;
+                  width: 100%;
+                  padding: 10px;
+                }
+
+                .document-type {
+                  text-align: right;
+                  color: #444;
+                }
+                .title {
+                   color: #444;
+                   font-weight: bold;
+                  }
+            </style>
+ -->
+              
+        <div class="container">
+          <div class="invoice">
+              
+             <div>
+                   <table  class="bpro_contained bpro-width">
+                    <tr>
+                       <td rowspan="2" align="center" class="bpro_border_left" style="border:1px solid;font-size:16px;">
+                        <strong> <p class="document-type ">  DAKAR OCEAN <br/>TERMINAL</p> </strong>
+                      </td>
+                      <td rowspan="2"  align="center" class="align-middle ">
+                        <strong> <h5 style="text-align: center;" class="document-type ">PLAN DE CHARGEMENT</h5> </strong>
+                      </td>
+                     <td class="text-center" rowspan="1" style="border:1px solid;font-size:16px;">Date de creation <br/>                        28/02/2014</td> 
+                   </tr>
+                    <tr>
+                      
+                       
+                     <td class="text-center" rowspan="1" style="border:1px solid;font-size:16px;"> DOT-ENR.01</td>
+                   </tr>
+                      
+                  </table>
+              </div>
+              
+              <br/>
+              
+            <div class="row">
+            
+               <div class="col-7">
+                
+                <p>
+                     <strong>PTAC/PTRAC: </strong> <span t-field="o.ptac_ptrac"/><br/>
+                    <strong>Date d'établissement: </strong><span t-field="o.date_order"/> <br/>
+                    <strong>Date fin validité carnet de jauge: </strong> <span t-field="o.date_fin_carnet"/> <br/>
+                    <strong>Heure d'établissement: </strong><br/>
+                    <strong>Heure d'entrée dépot: </strong><br/>
+                    <strong>Compagnie: </strong> <span t-field="o.partner_id"/><br/>
+                   
+                </p>
+              </div>
+                
+            <div class="col-5">
+                <p>
+                      <strong>Remplisseur: </strong> <span t-field="o.remplisseur_id"/><br/>
+                    <strong>Numéro ilot: </strong> <span t-field="o.num_ilot"/><br/>
+                    <strong>Heure début chargement: </strong><br/>
+                    <strong>Heure fin chargement: </strong><br/>
+                    <strong>Heure de sortie dépot: </strong><br/>
+                    <strong>PTAC/PTRAC Majoré: </strong> <span t-field="o.ptac_ptrac_majore"/><br/>
+                </p>
+              </div>
+            </div>
+            <br/>
+       
+            <!--
+            <table style="width:100%;border-collapse:collapse;margin-top:20px;">
+                          <tr>
+                              <td class="text-center" style="border:1px solid;font-size:16px;">Poids</td>
+                               <td class="text-center" style="border:1px solid;font-size:16px">Especes</td>
+                               <td class="text-center" style="border:1px solid;font-size:16px">PU</td>
+                               <td class="text-center" style="border:1px solid;font-size:16px">Total</td>
+                          </tr>
+                          
+                    <tr>
+                      <td> <span t-field="o.matricule_citerne_id"/> </td>
+                      <td> <span t-field="o.transporteur_id"/> </td>
+                      <td> <span t-field="o.name"/> </td>
+                      <td>Oui</td>
+                        <t t-foreach="o.compartiment_ids" t-as="c">  
+                        <td class="text-right"><span t-field="c.capacite"/></td>
+                         </t>
+                    </tr>
+                          
+           </table>
+              -->
+            
+            <table style="width:100%;border-collapse:collapse;margin-top:20px;">
+                
+              <thead>
+                <!--<tr>
+                 <div class="row">
+                    <div class="col-8">
+                
+                      <p>
+                      </p>
+                        
+                     </div>
+
+                     <div class="col-4">
+                      <p>
+                      N de Compartiments et Volumes
+                      </p>
+                     </div>   
+                   </div>
+                  
+                </tr>
+                 -->
+                  
+                <tr style="width:6px">
+                  
+                    <th class="text-center" style="border:1px solid;font-size:14px;width:10%;">Matricule <br/>Citerne</th> 
+                  <th class="text-center" style="border:1px solid;font-size:14px;width:10%;">Transporteur</th>
+                  <th class="text-center" style="border:1px solid;font-size:14px;width:10%;">Nbre de compartiment</th>
+                    <t t-foreach="o.compartiment_ids" t-as="c">  
+                    <th class="text-center" style="border:1px solid;font-size:12px;"> <span t-field="c.name"/></th>
+                         </t>
+                
+                </tr>
+                 
+              </thead>
+              <tbody>
+                
+                  
+                  
+                   <t>  
+                    <tr>
+                      <td class="text-center" style="border:1px solid;font-size:14px;" > <span t-field="o.matricule_citerne_id"/> </td>
+                      <td class="text-center" style="border:1px solid;font-size:14px;" > <span t-field="o.transporteur_id"/> </td>
+                      <td class="text-center" style="border:1px solid;font-size:14px;width:4px;"> <span t-field="o.nbre_capacite_total"/> </td>
+                      <t t-foreach="o.compartiment_ids" t-as="c">  
+                        <td  style="border:1px solid;font-size:12px;" class="text-right"><span t-field="c.capacite"/></td>
+                      </t>
+                    </tr>
+                       
+                 </t>
+                  
+                 
+                
+                  
+              </tbody>
+            </table>
+              
+              
+              
+              <div class="row">
+              <div class="col-8">
+              </div>
+              <div class="col-4">
+                <table class="table table-sm text-right">
+                  <tr>
+                    <td><strong>Capacité total: </strong></td>
+                    <td class="text-right"> <span t-field="o.capacite_total_charge"/></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+              
+            <div>
+                
+            <table style="width:100%;border-collapse:collapse;">
+             
+                
+                <tr>
+                    <th class="text-center" style="border:1px solid;font-size:14px;width:15%;">N° ordre de chargement </th> 
+                  <th class="text-center" style="border:1px solid;font-size:14px;width:15%;">Désignation produit</th> 
+                      <th class="text-center" style="border:1px solid;font-size:14px;" colspan="2">Remplissage compartiment</th> 
+                  <!-- 
+                   <th class="text-center" style="border:1px solid;font-size:14px;">Poids calculé</th>
+                  <th class="text-center" style="border:1px solid;font-size:14px;">PTAC/PTRAC <br/>Majoré:</th>
+                 <th class="text-center" style="border:1px solid;font-size:14px">Validité carnet <br/>de jauge</th>-->
+                      
+                </tr>
+                
+                <!--
+                
+                 <t  t-foreach="o.order_line" t-as="val">
+                     
+                    <tr>
+                        
+                      <td class="text-center" style="border:1px solid;font-size:14px;"> <span t-field="val.product_id"/> </td>
+                      
+                        <t t-foreach="o.compartiment_ids" t-as="c">
+                            <t t-if="c.capacite">
+                      <td  style="border:1px solid;font-size:12px;background-color: #00A09D;" class="text-right"><span t-field="c.capacite"/></td>
+                            </t>     
+                      </t>
+                    </tr>
+                </t>
+                 -->
+                 
+          
+                   <t t-foreach="o.compartiment_ids" t-as="c">  
+                    <tr>
+                    <td class="text-center" style="border:1px solid;font-size:14px;">  <span t-field="o.orde_chargement"/></td>
+                         <t t-if="c.product_id ">
+                      <td class="text-center" style="border:1px solid;font-size:14px;"> <span t-field="c.product_id"/> </td>
+                      
+                        <td class="text-center" style="border:1px solid;font-size:12px"> <span t-field="c.name"/></td> 
+                      <td  style="border:1px solid;font-size:12px;" class="text-right"><span t-field="c.capacite"/></td>
+                              
+                      </t>
+                    </tr>
+                </t> 
+                
+                
+                  
+                <!--
+                   <t>  
+                    <tr>
+                      <td class="text-center" style="border:1px solid;font-size:14px;"> <span t-field="o.order_line.product_id"/> </td>
+                       <td class="text-center" style="border:1px solid;font-size:14px;"> <span t-field="o.orde_chargement"/> </td>
+                      <td class="text-center" style="border:1px solid;font-size:14px;"> <span t-field="o.poids_calcule"/> </td>
+                      <td class="text-center" style="border:1px solid;font-size:14px;"> <span t-field="o.ptac_ptrac_majore"/> </td>
+                       <td class="text-center" style="border:1px solid;font-size:14px;" >Oui</td> 
+                    </tr>
+                       
+                 </t>
+                  -->
+              
+            </table>
+            </div>
+              
+              
+               <table>
+        
+                <tr>
+                 <div class="row">
+                    <div class="col-8">
+                 <p >
+                       <div  style="border:1px solid;font-size:14px;width:25%;"><strong>Poids calculé : </strong> <span t-field="o.poids_calcule"/></div>
+                     <strong>Taux Majoration: </strong> <span t-field="o.taux_majoration"/>%<br/><br/>
+                      </p>
+                        
+                     </div>
+
+                     <div class="col-4">
+                     
+                     </div>   
+                   </div>
+                  
+                </tr>
+                     </table>
+                  
+              
+              
+              <div>
+                   <table  class="bpro_contained bpro-width">
+                    <tr>
+                      <td class="text-center" colspan="2" style="border:1px solid;font-size:18px;">Section reservée à la comptabilité stock</td> 
+                      <td class="text-center" colspan="4" style="border:1px solid;font-size:18px;">section reservée au poste de remplissage </td> 
+                           <td class="text-center" style="border:1px solid;font-size:18px;">section reservée à la sortie </td> 
+                     
+                   </tr>
+                       
+                    <tr>
+                      <td class="text-center" style="border:1px solid;font-size:18px"  colspan="2"></td> 
+                      <td class="text-center" style="border:1px solid;font-size:18px" colspan="2">Controlé par  </td> 
+                      <td class="text-center" style="border:1px solid;font-size:18px;" colspan="2"> Visa chef remplisseur</td>
+                          <td class="text-center" style="border:1px solid;font-size:18px;"></td> 
+                   </tr>
+                       
+                       <tr style="height:90px">
+                      <td class="text-center" style="border:1px solid;font-size:16px;text-decoration: underline;"  >Présenté par</td> 
+                      <td class="text-center" style="border:1px solid;font-size:16px;text-decoration: underline;"   >Controlé et validé par  </td> 
+                      <td class="text-center" style="border:1px solid;font-size:16px;text-decoration: underline;"   >Controleur </td> 
+                      <td class="text-center" style="border:1px solid;font-size:16px;text-decoration: underline;" >Chauffeur</td>
+                      <td class="text-center" style="border:1px solid;font-size:16px;" colspan="2"></td> 
+                      <td class="text-center" style="border:1px solid;font-size:16px;text-decoration: underline;"   >Controlé a la sortie par  </td> 
+                   </tr>
+                      
+                  </table>
+              </div>
+              
+          
+
+          </div>
+        </div>
+              
+              
+          <!--
+ 
+                       <tr>
+                      <th class="text-center" style="border:1px solid;font-size:12px;width:36%">Présenté par</th> 
+                      <th class="text-center" style="border:1px solid;font-size:12px;"  >Controlé et<br/> validé par  </th> 
+                      <th class="text-center" style="border:1px solid;font-size:12px;"  >Controleur </th> 
+                      <th class="text-center" style="border:1px solid;font-size:12px;">Chauffeur</th>
+                      <th class="text-center" style="border:1px solid;font-size:12px;"></th> 
+                      <th class="text-center" style="border:1px solid;font-size:12px;"  >Controlé a la sortie par  </th> 
+                   </tr>
+                       
+
+ <table  class="bpro_contained bpro-width">
+                  
+                    <tr class="bpro_border_head">
+                      <td align="center" colspan="3" class="bpro_border_left">
+                      Section reservée à la comptabilité stock
+                      </td>
+                        <td align="center" colspan="6" class="bpro_border_left">
+                      section reservée au poste de remplissage
+                      </td>
+                        <td align="center" colspan="3" class="bpro_border_left">
+                      Section reservée à la sortie
+                      </td>
+                    </tr>   
+                       
+                    <tr class="bpro_border_head">
+                     <td rowspan="5" colspan="5" align="center" class="bpro_border_left">
+                        <strong> <p class="document-type ">  </p> </strong>
+                      </td>
+                          <td colspan="5" style="width:36%" align="center" class="bpro_border_left">
+                        controlé par 
+                         
+                      </td>
+                      <td rowspan="5" colspan="5" align="center" class="align-middle bpro_border_left">
+                        <strong> <h4 class="document-type "></h4> </strong>
+                      </td>
+                    
+                    </tr>
+                     <tr class="bpro_border_head">
+                      <td align="center" class="bpro_border_left">
+                      Visa chef remplisseur
+                      </td>
+                    </tr>
+                       
+                  </table>
+        
+
+            <div>
+                <table style="width:100%;border-collapse:collapse;margin-top:20px;">
+       .         <tr>
+                  <th class="text-center" style="border:1px solid;font-size:18px;">Section reservée a la comptabilité stock</th> 
+                  <th class="text-center" style="border:1px solid;font-size:18px;">section reservée au poste de remplissage </th> 
+                  <th class="text-center" style="border:1px solid;font-size:18px;">section reservée a la sortie</th>
+                
+                </tr>
+                    
+
+                </table>
+              </div>
+
+ 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
+
+
+git commit -m "lié contrat a employé,si la feuille de paie est cloturé cré un congé,le salarié perd les jours non pris au bout de 2ans"
+             -->
+         </div>
+        </t>
+      </t>
+    </t>
+  </template>
+
+        
+        
+        
+    <template id="header_new">
+      <style type="text/css">
+        .bpro_footer_table {
+          border-collapse: collapse;
+        }
+        .breport-colums-livre-paie {
+          border-right:1px solid;
+          text-align:right;
+          padding-right:2px;
+        }
+
+        .bpro_header_left {
+          border: 1px solid black;
+          width: 56%;
+          height: 260px;
+          float:left;
+          margin-bottom:1%;
+        }
+        .bpro_header_livre-paie {
+          border: 1px solid black;
+          width: 100%;
+          height: 100px;
+          float:left;
+          margin-bottom:1%;
+        }
+
+        .bpro_header_right {
+          border: 1px solid black;
+          width: 43%;
+          height: 260px;
+          margin-left: 10px;
+          float: right;
+          margin-bottom:1%;
+        }
+
+        .bpro_line {
+          height: 50px;
+          padding-top: 50px;
+          padding-right: 30px;
+          padding-bottom: 30px;
+          padding-left: 110px;
+          font-size: 25px;
+        }
+
+        .bpro_header_border {
+          border-top: 1px solid black;
+          border-bottom: 1px solid black;
+        }
+
+        .bpro_contained {
+          border-collapse: collapse;
+          border: 1px solid #242526;
+        }
+
+        .bpro_border_left {
+          border-left: 1px solid #242526;
+        }
+
+        .bpro_border_right {
+          border-right: 1px solid #242526;
+        }
+
+        .bpro_label_second > td {
+          border: 1px solid black;
+        }
+
+        .bpro_head {
+          text-align: center;
+        }
+
+        .bpro_space {
+          padding-right: 5px;
+        }
+
+        .bprol_width_footer {
+          width: 8.5%;
+          font-size: 11px;
+          padding-top: 10px;
+        }
+
+        .bpro_label_footer_first > td {
+          border-left: 1px solid;
+        }
+
+        .bpro_footer_border > td {
+          border-left: 1px solid black;
+          border-right: 1px solid black;
+          border-bottom: 1px solid black;
+        }
+
+        .bpro_text_italic {
+          font-style: italic;
+        }
+        .bpro_padding_left {
+          padding-left: 5px;
+        }
+
+        .bpro_head_period {
+          border-bottom: 1px solid black;
+        }
+
+        .bpro_detail {
+          height: 50px;
+          padding-left: 29px;
+          padding-top: 15px;
+        }
+
+        .bpro_head_label_first {
+          width: 42%;
+        }
+
+        .bpro_head_label_second {
+          width: 12%;
+        }
+
+        .bpro_head_label_third {
+          width: 8%;
+        }
+
+        .bprol_head_label_fourth {
+            width: 33%
+
+        }
+
+        .bpro_content_padding_top {
+          height:  15px !important;
+          padding: 2px;
+        }
+
+        .bpro_blank_line {
+          color: white;
+        }
+
+        .bpro_content_padding_bottom {
+          padding-bottom: 15px;
+        }
+
+        .bpro_space_bottom {
+          padding-bottom: 15%;
+        }
+
+        .bpro_font_size_detail {
+          font-size: 11px;
+        }
+
+        .bpro_footer_table_first {
+          border-collapse: collapse;
+          height: 100px;
+          border: 1px solid;
+        }
+
+        .bpro_footer_head_first {
+          width: 20.5%;
+        }
+
+        .bpro_footer_second {
+          width: 30.2%;
+          padding-left: 10px;
+        }
+
+        .bpro_footer_third {
+          width: 12.5%;
+        }
+
+        .bpro_footer_fourth {
+          width: 17.3%;
+        }
+
+        .bpro_font_balance {
+          font-weight: bold;
+        }
+
+        .bpro_padding_bottom_footer {
+          padding-top: 10px;
+        }
+
+        .bpro_footer_table_second {
+          border-collapse: collapse;
+          height: 100px;
+        }
+
+        .bpro_label_cash {
+          padding-bottom: 2px;
+          padding-left: 5px;
+        }
+
+        .bpro-width {
+          width: 100%;
+        }
+        .bpro-background {
+          background-color: #f2f2f2;
+        }
+
+        .bpro_padding_imp {
+          padding-right: 80px;
+        }
+
+        .bpro_left_date {
+          left: 10px;
+          width: 20%;
+        }
+
+        .bpro_padding_category {
+          padding-left: 20px;
+        }
+
+        .bpro_right {
+          right: 10px;
+        }
+
+        .bpro_padding_right {
+          padding-right: 10px;
+        }
+
+        .bpro_qualification {
+          height: 30px;
+        }
+
+        .bpro_padding_convention {
+          height: 25px;
+          padding-left: 10px;
+          text-align: left
+        }
+        .bpro_padding_convention-right {
+          height: 25px;
+          padding-right: 10px;
+          text-align: right
+        }
+
+        .bpro_padding_issued {
+          padding-left: 25px;
+        }
+
+        .bpro_border_head {
+          border-bottom: 1px solid #242526;
+        }
+
+        .bpro_div_bottom {
+          margin-top: 2%;
+        }
+
+        .bpro_border_balance {
+          border-top: 1px solid #242526;
+        }
+
+        .bpro_padding_year {
+          padding-left: 8px;
+        width: 20.5%
+        }
+
+        .bpro_padding_top {
+          padding-top: 2px;
+        border-top:1px solid;
+        }
+
+        .bpro_padding_top_Net {
+          padding-top: 5px;
+          height: 10px;
+        }
+
+        .bpro_width_sitfam {
+          width: 20%;
+          padding-right: 10px;
+        }
+
+        .padding_top_detail {
+           padding-top: 5px;
+        }
+
+        .padding-right-security {
+           padding-right: 50px;
+        }
+
+        .padding-right-retreat {
+           padding-right: 40px;
+        }
+
+        .padding-right-sitfam {
+           padding-right: 20px;
+        }
+
+        .padding-left-cotegory {
+           padding-left: 30px;
+        }
+
+        .padding-left-year-td {
+           padding-left: 10px;
+        }
+
+        .bproll-espace-top {
+           height: 10px;
+        }
+
+        .bproll-espace-bottom {
+           height: 150px;
+        }
+        .bproll-header-padding {
+            padding-top: 2px;
+        }
+
+        .bproll_right_head {
+            padding-right: 25px;
+        }
+
+        .table-bordered {
+          border: 1px solid #242526;
+        }
+
+        .table-bordered th,
+        .table-bordered td {
+          border: 1px solid #242526;
+        }
+
+        .table-bordered thead th,
+        .table-bordered thead td {
+          border-bottom-width: 2px;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .table-active,
+        .table-active > th,
+        .table-active > td {
+        background-color: rgba(0, 0, 0, 0.075);
+        }
+
+        .table-hover .table-active:hover {
+        background-color: rgba(0, 0, 0, 0.075);
+        }
+
+        .table-hover .table-active:hover > td,
+        .table-hover .table-active:hover > th {
+        background-color: rgba(0, 0, 0, 0.075);
+        }
+
+        .align-middle {
+        vertical-align: middle !important;
+        }
+
+        p {
+          font-size: 14px;
+        }
+
+        .round {
+                background: white;
+                padding: 35px;
+                margin: 5px;
+                border: solid 1px black;
+                -moz-border-radius: 35px;
+                -webkit-border-radius: 35px;
+                -o-border-radius: 80px;
+                -ms-border-radius: 80px;
+                border-radius: 90%;
+                box-shadow: 0 0 3px #ccc;
+                width: 30%;
+                float: right;
+          }
+
+      </style>
+    </template>
+    <template id="headerless_layout">
+      <!-- Multicompany -->
+      <t t-if="o and 'company_id' in o">
+        <t t-set="company" t-value="o.company_id"></t>
+      </t>
+      <t t-if="not o or not 'company_id' in o">
+        <t t-set="company" t-value="res_company"></t>
+      </t>
+
+      <t t-call="web.external_layout"/>
+      <t t-raw="0"/>
+    </template>
+  </data>
+</odoo>

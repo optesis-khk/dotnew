@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- by ANG -->
+<odoo>
+<template id="optesis_dot_stock"> 
+                 <t t-call="web.html_container">
+
+                        <t t-foreach="docs" t-as="o">
+                        <t t-call="optesis_report.optesis_external_view">
+                                <div class="page" style="padding-top:20px;">
+                                    <style>
+                                        #border_install {
+                                            border-right: 1px solid;
+                                            border-top: 1px solid;
+                                            border-bottom : 3px solid;
+                                            font-size:30px;
+                                            margin-left:3px;
+
+                                        }
+                                        .bold{
+                                            font-weight:bold;
+                                         }
+                                         #big_font{
+                                           font-size:34px;
+                                           }
+                                        #marg10{
+                                           margin-top:20px;
+                                           }
+                                        .align_center{
+                                            text-align:center
+                                        }
+                                    </style>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <p id="border_install">
+                                                INSTALLATIONS D.O.T
+                                            </p>
+                                           
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top:30px">
+                                        <div class="col-12">
+                                            <strong>
+                                            <p class="text-center" style="font-size:40px;">
+                                                RAPPORT DE RETROCESSIONS
+                                            </p>
+                                            </strong> 
+                                        </div>
+                                    </div>
+                                <t t-foreach="o.move_ids_without_package" t-as="val">
+                                      <div class="row" style="margin-top:30px">
+                                        <div class="col-3">
+                                            <strong>
+                                            <p class="text-left" style="font-size:24px;padding:3px;">
+                                                PRODUIT
+                                            </p>
+                                            </strong>
+                                        </div>
+                                          
+                                        <div class="col-9">
+                                            <strong>
+                                            <p class="text-center" style="font-size:24px;padding:3px;background-color:#BEBEBE;border:1px solid #BEBEBE">
+                                                <span t-field="val.product_id">
+                                                </span>
+                                            </p>
+                                            </strong>
+                                        </div>
+                                        <div class="col-1">
+                                        </div>
+                                    </div>
+                                    
+                                     <div class="row" style="margin-top:30px">
+                                        <div class="col-3">
+                                            <strong>
+                                            <p class="text-left" style="font-size:24px;padding:3px;">
+                                                REGIME DOUANIER
+                                            </p>
+                                            </strong>
+                                        </div>
+                                          
+                                        <div class="col-9">
+                                            <strong>
+                                            <p class="text-center" style="font-size:24px;padding:3px;background-color:#BEBEBE;border:1px solid #BEBEBE">
+                                                <span t-field="o.regime">
+                                                </span>
+                                            </p>
+                                            </strong>
+                                        </div>
+                                        <div class="col-1">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row" style="margin-top:30px">
+                                        <div class="col-3">
+                                            <strong>
+                                            <p class="text-left" style="font-size:24px;padding:3px;">
+                                                DATE
+                                            </p>
+                                            </strong>
+                                        </div>
+                                          
+                                        <div class="col-9">
+                                            <strong>
+                                            <p class="text-center" style="font-size:24px;padding:3px;background-color:#BEBEBE;border:1px solid #BEBEBE">
+                                              <span t-field="o.scheduled_date"/>
+                                            </p>
+                                            </strong>
+                                        </div>
+                                        <div class="col-1">
+                                        </div>
+                                    </div>
+                                    
+                                     <div class="row" style="margin-top:30px">
+                                        <div class="col-3">
+                                            <strong>
+                                            <p class="text-left" style="font-size:24px;padding:3px;">
+                                                DE
+                                            </p>
+                                            </strong>
+                                        </div>
+                                          
+                                        <div class="col-9">
+                                            <strong>
+                                            <p class="text-center" style="font-size:24px;padding:3px;background-color:#BEBEBE;border:1px solid #BEBEBE">
+                                                      <span t-field="o.location_id">
+
+                                                </span>
+                                            </p>
+                                            </strong>
+                                        </div>
+                                        <div class="col-1">
+                                        </div>
+                                    </div>
+                                    
+                                     <div class="row" style="margin-top:30px">
+                                        <div class="col-3">
+                                            <strong>
+                                            <p class="text-left" style="font-size:24px;padding:3px;">
+                                                A
+                                            </p>
+                                            </strong>
+                                        </div>
+                                          
+                                        <div class="col-9">
+                                            <strong>
+                                            <p class="text-center" style="font-size:24px;padding:3px;background-color:#BEBEBE;border:1px solid #BEBEBE">
+                                             <span t-field="o.location_dest_id"> 
+
+                                                </span>
+                                            </p>
+                                            </strong>
+                                        </div>
+                                        <div class="col-1">
+                                        </div>
+                                    </div>
+                                     <div class="row" style="margin-top:30px">
+                                        <div class="col-3">
+                                            <strong>
+                                            <p class="text-left" style="font-size:24px;padding:3px;">
+                                                VOLUME AMBIANT
+                                            </p>
+                                            </strong>
+                                        </div>
+                                          
+                                        <div class="col-9">
+                                            <strong>
+                                            <p class="text-center" style="font-size:24px;padding:3px;background-color:#BEBEBE;border:1px solid #BEBEBE">
+                                                          <span t-esc="'{0:,.0f}'.format(val.volume_ambiant).replace(',', ' ')"/>
+                                            </p>
+                                            </strong>
+                                        </div>
+                                        <div class="col-1">
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                     <div class="row" style="margin-top:30px">
+                                        <div class="col-3">
+                                            <strong>
+                                            <p class="text-left" style="font-size:24px;padding:3px;">
+                                                VOLUME A 15°C
+                                            </p>
+                                            </strong>
+                                        </div>
+                                          
+                                        <div class="col-9">
+                                            <strong>
+                                            <p class="text-center" style="font-size:24px;padding:3px;background-color:#BEBEBE;border:1px solid #BEBEBE">
+                                                            <span t-esc="'{0:,.0f}'.format(val.volume_15).replace(',', ' ')"/>
+                                            </p>
+                                            </strong>
+                                        </div>
+                                        <div class="col-1">
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                      <div class="row" style="margin-top:30px">
+                                        <div class="col-3">
+                                            <strong>
+                                            <p class="text-left" style="font-size:24px;padding:3px;">
+                                                POIDS
+                                            </p>
+                                            </strong>
+                                        </div>
+                                          
+                                        <div class="col-9">
+                                            <strong>
+                                            <p class="text-center" style="font-size:24px;padding:3px;background-color:#BEBEBE;border:1px solid #BEBEBE">
+                                                
+                                                              <span t-esc="'{0:,.0f}'.format(val.poids).replace(',', ' ')"/>
+                                                   
+                                            
+                                            </p>
+                                            </strong>
+                                        </div>
+                                        <div class="col-1">
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                     <div class="row" style="margin-top:30px">
+                                        <div class="col-3">
+                                            <strong>
+                                            <p class="text-left" style="font-size:24px;padding:3px;">
+                                                DA15
+                                            </p>
+                                            </strong>
+                                        </div>
+                                          
+                                        <div class="col-9">
+                                            <strong>
+                                            <p class="text-center" style="font-size:24px;padding:3px;background-color:#BEBEBE;border:1px solid #BEBEBE">
+                                             
+                                                          <span t-esc="'{0:,.0f}'.format(val.densite_15).replace(',', ' ')"/>
+                                            </p>
+                                            </strong>
+                                        </div>
+                                     
+                                    </div>
+                                    
+                                     <div class="row" style="margin-top:30px">
+                                        <div class="col-3">
+                                            <strong>
+                                            <p class="text-left" style="font-size:24px;padding:3px;">
+                                                coef
+                                            </p>
+                                            </strong>
+                                        </div>
+                                          
+                                        <div class="col-9">
+                                            <strong>
+                                            <p class="text-center" style="font-size:24px;padding:3px;background-color:#BEBEBE;border:1px solid #BEBEBE">
+                                       
+                                                     <span t-esc="'{0:,.2f}'.format(val.coef_vcf).replace(',', ' ')"/>
+                                                
+                                            </p>
+                                            </strong>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                     <div class="row" style="margin-top:30px">
+                                        <div class="col-3">
+                                            <strong>
+                                            <p class="text-left" style="font-size:24px;padding:3px;">
+                                                EMF
+                                            </p>
+                                            </strong>
+                                        </div>
+                                          
+                                        <div class="col-9">
+                                            <strong>
+                                            <p class="text-center" style="font-size:24px;padding:3px;background-color:#BEBEBE;border:1px solid #BEBEBE">
+                                                          <span t-esc="'{0:,.2f}'.format(val.temperature).replace(',', ' ')"/>
+                                            </p>
+                                            </strong>
+                                        </div>
+                                     
+                                    </div>
+                                                    
+                                      <div class="row" style="margin-top:30px">
+                                        
+                                          
+                                        <div class="col-12">
+                                            <strong>
+                                            <p class="text-left" style="font-size:24px;padding:3px;background-color:#BEBEBE;border:1px solid #BEBEBE;height:300px">
+                                                <span t-field="o.note">
+                                                    
+                                                </span>
+                                            </p>
+                                            </strong>
+                                        </div>
+                                    
+                                    </div>
+                                     <div class="row" style="margin-top:30px">
+                                        
+                                          
+                                        <div class="col-12">
+                                            <strong>
+                                            <p class="text-center" style="font-size:24px;padding:40px;">
+                                                <span>
+                                                   ADJOINT  CHEF DES INSTALLATIONS
+                                                </span>
+                                            </p>
+                                            </strong>
+                                        </div>
+                                    
+                                    </div>
+                                    </t>
+                                </div>
+                            </t>
+                        </t>
+                    </t>
+    
+            </template>
+    
+</odoo>

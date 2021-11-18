@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+      <!-- Pour Vivo RAPPORT DE RECTROCESSION -->
+        <report
+            id="optesis_dot_vivo"
+            model="stock.picking"
+            string="RAPPORT DE RETROCESSION"
+            report_type="qweb-pdf"
+            name="optesis_report.optesis_dot_stock"
+            file="optesis_report.report_vivo_reception"
+            paperformat="optesis_report.optesis_stock_vivo"
+            menu="True"
+            />
+        
+              <!-- Pour Vivo RAPPORT DE RECEPTION  DOT -->
+        <report
+            id="optesis_vivo_dot_reception"
+            model="stock.picking"
+            string="RAPPORT DE RECEPTION"
+            report_type="qweb-pdf"
+            name="optesis_report.optesis_dot_vivo_reception"
+            file="optesis_report.report_vivo_dot"
+            paperformat="optesis_report.optesis_stock_vivo_landscape"
+
+            />
+    </data>
+</odoo>
